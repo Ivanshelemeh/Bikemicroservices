@@ -1,16 +1,19 @@
 package com.example.bikecustomservise.api.entities;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "bike_order")
 @AllArgsConstructor
 @NoArgsConstructor
-public class BikeOrder {
+@Data
+public class BikeOrder implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
