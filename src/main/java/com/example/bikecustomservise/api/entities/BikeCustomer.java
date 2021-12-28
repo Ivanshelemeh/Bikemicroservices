@@ -28,7 +28,7 @@ public class BikeCustomer implements Serializable {
 
     @Column(name = "mail",nullable = false, unique = true)
     @Size(max = 20)
-    @Email(regexp = "^([\\\\w-\\\\.]+){1,64}@([\\\\w&&[^_]]+){2,255}.[a-z]{2,}$")
+    @Email
     private String email;
 
     @Column(name = "password")
