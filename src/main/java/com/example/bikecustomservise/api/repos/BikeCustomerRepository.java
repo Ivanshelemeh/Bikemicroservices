@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 public interface BikeCustomerRepository extends JpaRepository<BikeCustomer, Integer> {
+
     BikeCustomer findBikeCustomerById(Integer id);
 
     List<BikeCustomer> findAll();

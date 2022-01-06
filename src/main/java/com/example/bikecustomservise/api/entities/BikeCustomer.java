@@ -33,4 +33,9 @@ public class BikeCustomer implements Serializable {
 
     @Column(name = "password")
     private String password;
+
+
+    @ManyToOne(targetEntity = BikeOrder.class,cascade = CascadeType.ALL)
+    @JoinColumn(name = "id",insertable = false, updatable = false)
+    private BikeOrder order;
 }

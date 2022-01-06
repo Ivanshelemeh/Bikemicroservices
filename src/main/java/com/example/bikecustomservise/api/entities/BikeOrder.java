@@ -25,8 +25,7 @@ public class BikeOrder implements Serializable {
     @Column(name = "price")
     private double priceOrder;
 
-    @OneToMany(targetEntity = BikeCustomer.class,cascade = CascadeType.ALL)
-    @JoinColumn(name = "id", insertable = false , updatable = true, referencedColumnName = "id", nullable = false)
-    @Column(nullable = true,name = "bike_order_list")
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "id")
+   // @JoinColumn(name = "id", insertable = false, updatable = true, referencedColumnName = "id", nullable = true)
     private List<BikeCustomer> bikeCustomerList;
 }

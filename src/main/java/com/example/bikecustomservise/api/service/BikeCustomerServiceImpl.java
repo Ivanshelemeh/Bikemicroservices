@@ -68,6 +68,7 @@ public class BikeCustomerServiceImpl implements BikeCustomerService {
         if (name.isEmpty()) {
             throw new NoSuchFieldException("not such name found");
         }
+        bikeCustomerRepository.deleteAll();
         BikeCustomer bikeCustomer1 = new BikeCustomer();
         bikeCustomer1.setNickName(name);
         bikeCustomer1.setPassword(bikeCustomer.getPassword());

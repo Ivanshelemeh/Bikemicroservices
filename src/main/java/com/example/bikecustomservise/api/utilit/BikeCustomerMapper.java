@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class BikeCustomerMapper {
 
-    private static final ModelMapper MODEL_MAPPER = new ModelMapper();
+    public static final ModelMapper MODEL_MAPPER = new ModelMapper();
 
     public BikeCustomerDTO mapToDTO(BikeCustomer customer) {
         BikeCustomerDTO dto = MODEL_MAPPER.map(customer, BikeCustomerDTO.class);

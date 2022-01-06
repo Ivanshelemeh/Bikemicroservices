@@ -21,8 +21,7 @@ public class BikeCustomerController {
 
     private final BikeCustomerServiceImpl service;
     private final BikeCustomerMapper customerMapper;
-
-
+    
     @Autowired
     public BikeCustomerController(BikeCustomerServiceImpl service, BikeCustomerMapper customerMapper) {
         this.service = service;
@@ -31,7 +30,8 @@ public class BikeCustomerController {
 
     @GetMapping("/list")
     public List<BikeCustomerDTO> customerDTOList() {
-        List<BikeCustomerDTO> bikeCustomerDTOS = service.findAll().stream().map(customerMapper::mapToDTO).collect(Collectors.toList());
+        List<BikeCustomerDTO> bikeCustomerDTOS = service.findAll().stream()
+                .map(customerMapper::mapToDTO).collect(Collectors.toList());
         return bikeCustomerDTOS;
 
     }
@@ -50,7 +50,8 @@ public class BikeCustomerController {
     @PutMapping(value = "/update/{nickName}", consumes = {MediaType.APPLICATION_JSON_VALUE}
     ,produces = {MediaType.APPLICATION_JSON_VALUE})
     @SneakyThrows
-    public ResponseEntity<String> updateCustomer( @PathVariable("nickName") String nickName, @RequestBody @Validated BikeCustomer customer) {
+    public ResponseEntity<String> updateCustomer( @PathVariable("nickName") String nickName,
+                                                  @RequestBody @Validated BikeCustomer customer) {
         if (nickName.isEmpty()) {
             ResponseEntity.noContent().build();
         }
