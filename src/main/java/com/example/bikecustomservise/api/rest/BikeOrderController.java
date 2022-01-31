@@ -22,7 +22,7 @@ public class BikeOrderController {
     /**
      * Find all orders in db
      *
-     * @return status 200
+     * @return should return status 200
      */
     @GetMapping(value = "/orders", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BikeOrderDTO> getAllOrder() {

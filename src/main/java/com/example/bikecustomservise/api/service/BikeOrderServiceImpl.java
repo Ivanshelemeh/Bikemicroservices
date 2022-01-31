@@ -46,7 +46,7 @@ public class BikeOrderServiceImpl implements BikeOrderService {
 
     @Override
     public void deleteByOrderName(String name) {
-        if (name.isEmpty()) {
+        if (name == null) {
             throw new IllegalArgumentException("not such name ");
         }
         Optional<BikeOrder> optionalBikeOrder = orderRepository.findAll()

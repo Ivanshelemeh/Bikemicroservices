@@ -1,42 +1,33 @@
 package com.example.bikecustomservise.api.controllertest;
 
+import com.example.bikecustomservise.api.dto.BikeCustomerDTO;
 import com.example.bikecustomservise.api.entities.BikeCustomer;
-import com.example.bikecustomservise.api.repos.BikeCustomerRepository;
-import com.example.bikecustomservise.api.service.BikeCustomerServiceImpl;
-import org.junit.Before;
+import com.example.bikecustomservise.api.utilit.BikeCustomerMapper;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
+import java.util.ArrayList;
+import java.util.List;
 
-@RunWith(MockitoJUnitRunner.class)
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BikeCustomerControllerTest {
 
-    @MockBean
-    private BikeCustomerRepository repository;
+    @Autowired
+    TestRestTemplate testClient;
 
-    private BikeCustomerServiceImpl customerService;
-
-    @Before
-    public void setUp() {
-        customerService = new BikeCustomerServiceImpl(repository);
-    }
 
     @Test
-    public void getCustomerList_ShouldReturnList() throws Exception {
-        BikeCustomer customer = new BikeCustomer();
-        customer.setId(22);
-        customer.setEmail("lol041990@mail.ru");
-        customer.setNickName("Miller");
-        customer.setPassword("1234Qwe");
-        repository.save(customer);
-        given(repository.findBikeCustomerById(22)).willReturn(customer);
+    void testGetCustomerDtoList() {
+        List<BikeCustomerDTO> dtoList = new ArrayList<>();
+        dtoList = (List<BikeCustomerDTO>) testClient
+                .getForObject("/customer/list", BikeCustomerDTO.class);
+        assertThat(dtoList).isNull();
 
-        BikeCustomer bikeCustomer = customerService.findOne(22);
-        assertThat(bikeCustomer.getId()).isEqualTo(22);
     }
 }

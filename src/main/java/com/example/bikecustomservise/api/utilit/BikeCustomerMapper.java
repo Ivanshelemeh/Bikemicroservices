@@ -4,8 +4,12 @@ import com.example.bikecustomservise.api.dto.BikeCustomerDTO;
 import com.example.bikecustomservise.api.entities.BikeCustomer;
 import lombok.Data;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Component
@@ -25,6 +29,13 @@ public class BikeCustomerMapper {
         customer.setEmail(customerDTO.getEmail());
         customer.setPassword(customerDTO.getPassword());
         return customer;
+    }
+
+    public List<BikeCustomer> mapToListCustomer(List<BikeCustomerDTO> customerDTOList){
+        MODEL_MAPPER.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        List<BikeCustomer> list = new ArrayList<>();
+        list.forEach(bikeCustomer -> customerDTOList.add(MODEL_MAPPER.map(bikeCustomer,BikeCustomerDTO.class)));
+        return list;
     }
 
 }

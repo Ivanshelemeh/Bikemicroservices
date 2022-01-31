@@ -65,7 +65,7 @@ public class BikeCustomerServiceImpl implements BikeCustomerService {
 
     @SneakyThrows
     public void updateNickName(String name, BikeCustomer bikeCustomer) {
-        if (name.isEmpty()) {
+        if (name == null) {
             throw new NoSuchFieldException("not such name found");
         }
         bikeCustomerRepository.deleteAll();
