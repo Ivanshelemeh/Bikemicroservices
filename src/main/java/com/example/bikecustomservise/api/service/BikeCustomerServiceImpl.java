@@ -79,7 +79,7 @@ public class BikeCustomerServiceImpl implements BikeCustomerService {
     @SneakyThrows
     public void removeBikeCustomer(Integer id) {
         if (id == null) {
-            log.error("Not such id could be empty {}" + id);
+            log.error("id could not be empty" + id);
             throw new NoSuchFieldException("not found id");
         }
         bikeCustomerRepository.deleteBikeCustomerById(id);

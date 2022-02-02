@@ -1,33 +1,41 @@
 package com.example.bikecustomservise.api.controllertest;
 
-import com.example.bikecustomservise.api.dto.BikeCustomerDTO;
-import com.example.bikecustomservise.api.entities.BikeCustomer;
+import com.example.bikecustomservise.api.rest.BikeCustomerController;
+import com.example.bikecustomservise.api.service.BikeCustomerServiceImpl;
 import com.example.bikecustomservise.api.utilit.BikeCustomerMapper;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ExtendWith(SpringExtension.class)
+@WebMvcTest(controllers = BikeCustomerController.class)
 public class BikeCustomerControllerTest {
 
     @Autowired
-    TestRestTemplate testClient;
+    MockMvc mockMvc;
 
+    @MockBean
+    private BikeCustomerServiceImpl bikeCustomerService;
 
+    @MockBean
+    private BikeCustomerMapper mapper;
+
+    @SneakyThrows
     @Test
-    void testGetCustomerDtoList() {
-        List<BikeCustomerDTO> dtoList = new ArrayList<>();
-        dtoList = (List<BikeCustomerDTO>) testClient
-                .getForObject("/customer/list", BikeCustomerDTO.class);
-        assertThat(dtoList).isNull();
-
+    void testGetAllCustomers() {
+        mockMvc.perform(get("/customer/list")
+                .contentType("application/json")
+        ).andExpect(status().isOk());
     }
+
+
 }

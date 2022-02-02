@@ -17,6 +17,7 @@
         <java.version>11</java.version>
         <spring-boot-starter-validation>2.6.1</spring-boot-starter-validation>
         <org.modelmapper>2.3.5</org.modelmapper>
+        <spring-boot-starter-security>2.3.3.RELEASE</spring-boot-starter-security>
     </properties>
     <dependencies>
         <dependency>
@@ -57,6 +58,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
             <version>${spring-boot-starter-validation}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <version>${spring-boot-starter-security}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.restdocs</groupId>
