@@ -3,21 +3,15 @@ package com.example.bikecustomservise.api.dto;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-
+import org.springframework.stereotype.Service;
 
 @Data
 @Getter
 @Setter
-public class BikeCustomerSharedDTO implements Serializable {
+public class BikeCustomerResponseModel {
 
-    @NotNull
     private String nameCustomer;
-    @NotNull
-    private String password;
-    @NotNull
+    private String passwordCustomer;
     private String email;
     private Integer id;
 }

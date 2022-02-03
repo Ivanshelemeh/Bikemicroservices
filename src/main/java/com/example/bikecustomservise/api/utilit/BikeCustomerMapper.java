@@ -1,6 +1,8 @@
 package com.example.bikecustomservise.api.utilit;
 
 import com.example.bikecustomservise.api.dto.BikeCustomerDTO;
+import com.example.bikecustomservise.api.dto.BikeCustomerRequestModel;
+import com.example.bikecustomservise.api.dto.BikeCustomerResponseModel;
 import com.example.bikecustomservise.api.dto.BikeCustomerSharedDTO;
 import com.example.bikecustomservise.api.entities.BikeCustomer;
 import lombok.Data;
@@ -40,7 +42,6 @@ public class BikeCustomerMapper {
     }
 
     public BikeCustomer mapToCustomerEntity(BikeCustomerSharedDTO sharedDTO) {
-        MODEL_MAPPER.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         BikeCustomer customer1 = MODEL_MAPPER.map(sharedDTO, BikeCustomer.class);
         customer1.setNickName(sharedDTO.getNameCustomer());
         customer1.setPassword(sharedDTO.getPassword());
@@ -49,8 +50,14 @@ public class BikeCustomerMapper {
     }
 
     public BikeCustomerSharedDTO mapToDToShared(BikeCustomer bikeCustomer) {
-        BikeCustomerSharedDTO dto = MODEL_MAPPER.map(bikeCustomer, BikeCustomerSharedDTO.class);
-        return dto;
+        return MODEL_MAPPER.map(bikeCustomer, BikeCustomerSharedDTO.class);
+    }
+
+    public BikeCustomerSharedDTO mapFromRequestModel(BikeCustomerRequestModel requestModel){
+        return MODEL_MAPPER.map(requestModel,BikeCustomerSharedDTO.class);
+    }
+    public BikeCustomerResponseModel mapFromSharedDTO(BikeCustomerSharedDTO sharedDTO){
+        return MODEL_MAPPER.map(sharedDTO,BikeCustomerResponseModel.class);
     }
 
 }

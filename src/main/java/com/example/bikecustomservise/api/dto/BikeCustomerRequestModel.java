@@ -5,16 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-
 
 @Data
 @Getter
 @Setter
-public class BikeCustomerSharedDTO implements Serializable {
+public class BikeCustomerRequestModel {
 
     @NotNull
-    private String nameCustomer;
+    private String name;
     @NotNull
     private String password;
     @NotNull

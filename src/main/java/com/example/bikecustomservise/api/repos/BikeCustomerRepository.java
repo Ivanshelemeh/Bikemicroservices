@@ -16,4 +16,6 @@ public interface BikeCustomerRepository extends JpaRepository<BikeCustomer, Inte
 
     void deleteBikeCustomerById(Integer id);
 
+    BikeCustomer findByEmail(String email);
+
 }

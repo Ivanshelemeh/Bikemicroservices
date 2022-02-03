@@ -19,7 +19,7 @@ create table if not exists bike_customer
 ),
     password varchar
 (
-    10
+    1000
 ) not null
     );
 create table if not exists bike_order
