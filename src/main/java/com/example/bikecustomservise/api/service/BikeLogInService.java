@@ -7,5 +7,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public interface BikeLogInService extends UserDetailsService {
 
     BikeCustomerSharedDTO create(BikeCustomerSharedDTO dto);
+
     BikeCustomerSharedDTO getUserDetailsByEmail(String email);
 }

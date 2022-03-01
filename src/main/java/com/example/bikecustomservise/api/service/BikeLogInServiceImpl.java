@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 
 @Service
-public class BikeLogInServiceImpl implements BikeLogInService{
+public class BikeLogInServiceImpl implements BikeLogInService {
 
     private final BikeCustomerRepository repository;
     private final BikeCustomerMapper mapper;
@@ -23,7 +23,7 @@ public class BikeLogInServiceImpl implements BikeLogInService{
     public BikeLogInServiceImpl(BikeCustomerRepository repository, BikeCustomerMapper mapper, BCryptPasswordEncoder encoder) {
         this.repository = repository;
         this.mapper = mapper;
-        this.encoder =encoder;
+        this.encoder = encoder;
     }
 
     @Override
@@ -46,10 +46,10 @@ public class BikeLogInServiceImpl implements BikeLogInService{
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         BikeCustomer bikeCustomer = repository.findByEmail(username);
-        if (bikeCustomer == null){
+        if (bikeCustomer == null) {
             throw new UsernameNotFoundException("Not found user");
         }
-        return new User(bikeCustomer.getEmail(),bikeCustomer.getPassword(),true,true,true,
-                true,new ArrayList<>());
+        return new User(bikeCustomer.getEmail(), bikeCustomer.getPassword(), true, true, true,
+                true, new ArrayList<>());
     }
 }

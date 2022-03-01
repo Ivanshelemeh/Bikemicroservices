@@ -31,12 +31,12 @@ public class BikeCustomerLoginController {
     }
 
     @RequestMapping(value = "/login"
-    ,produces = MediaType.APPLICATION_JSON_VALUE, method = {RequestMethod.GET,RequestMethod.POST})
+            , produces = MediaType.APPLICATION_JSON_VALUE, method = {RequestMethod.GET, RequestMethod.POST})
     public String login() {
         return "Work in port" + env.getProperty("server.port");
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BikeCustomerResponseModel> createCustomer(@RequestBody BikeCustomerRequestModel model) {
         BikeCustomerSharedDTO sharedDTO = bikeCustomerMapper.mapFromRequestModel(model);
         BikeCustomerSharedDTO dto = logInService.create(sharedDTO);

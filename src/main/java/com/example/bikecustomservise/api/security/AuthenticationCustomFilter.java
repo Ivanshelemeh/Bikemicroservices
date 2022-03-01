@@ -2,7 +2,9 @@ package com.example.bikecustomservise.api.security;
 
 import com.example.bikecustomservise.api.dto.BikeCustomerSharedDTO;
 import com.example.bikecustomservise.api.dto.BikeCustomerSingInModel;
+import com.example.bikecustomservise.api.service.BikeCustomerServiceImpl;
 import com.example.bikecustomservise.api.service.BikeLogInService;
+import com.example.bikecustomservise.api.service.BikeLogInServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -15,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -25,17 +28,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
+@Component
 public class AuthenticationCustomFilter extends UsernamePasswordAuthenticationFilter {
 
-    private BikeLogInService service;
+    private BikeLogInServiceImpl bikeLogInService;
     private Environment environment;
 
     @Autowired
-    public AuthenticationCustomFilter(BikeLogInService service, Environment environment,
-                                      AuthenticationManager authenticationManager) {
-        this.service = service;
+    public AuthenticationCustomFilter(BikeLogInServiceImpl bikeLogInService, Environment environment,
+                                      AuthenticationManager manager) {
+        this.bikeLogInService= bikeLogInService;
         this.environment = environment;
-        super.setAuthenticationManager(authenticationManager);
+        super.setAuthenticationManager(manager);
     }
 
     @SneakyThrows
@@ -56,9 +60,9 @@ public class AuthenticationCustomFilter extends UsernamePasswordAuthenticationFi
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
-                                            Authentication authResult) throws IOException, ServletException {
-        String userName = ((User) authResult.getPrincipal()).getUsername();
-        BikeCustomerSharedDTO sharedDTO = service.getUserDetailsByEmail(userName);
+                                            Authentication authentication) throws IOException, ServletException {
+        String userName = ((User) authentication.getPrincipal()).getUsername();
+        BikeCustomerSharedDTO sharedDTO = bikeLogInService.getUserDetailsByEmail(userName);
 
         String token = Jwts.builder()
                 .setSubject(String.valueOf(sharedDTO.getId()))
