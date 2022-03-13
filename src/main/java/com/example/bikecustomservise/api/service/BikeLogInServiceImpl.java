@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
-@Service
+@Service("bikeLoginService")
 public class BikeLogInServiceImpl implements BikeLogInService {
 
     private final BikeCustomerRepository repository;
@@ -35,17 +35,17 @@ public class BikeLogInServiceImpl implements BikeLogInService {
     }
 
     @Override
-    public BikeCustomerSharedDTO getUserDetailsByEmail(String email) {
-        BikeCustomer bikeCustomer = repository.findByEmail(email);
+    public BikeCustomerSharedDTO getUserDetailsByPassword(String password) {
+        BikeCustomer bikeCustomer = repository.findByPassword(password);
         if (bikeCustomer == null) {
-            throw new UsernameNotFoundException(email);
+            throw new UsernameNotFoundException("no such user with item"+ password);
         }
         return mapper.mapToDToShared(bikeCustomer);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        BikeCustomer bikeCustomer = repository.findByEmail(username);
+        BikeCustomer bikeCustomer = repository.findByPassword(username);
         if (bikeCustomer == null) {
             throw new UsernameNotFoundException("Not found user");
         }

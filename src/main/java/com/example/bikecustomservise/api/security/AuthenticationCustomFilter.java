@@ -10,6 +10,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,20 +29,31 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * Authentication filter for incoming request
+ */
 @Component
 public class AuthenticationCustomFilter extends UsernamePasswordAuthenticationFilter {
+
 
     private BikeLogInServiceImpl bikeLogInService;
     private Environment environment;
 
     @Autowired
-    public AuthenticationCustomFilter(BikeLogInServiceImpl bikeLogInService, Environment environment,
+    public AuthenticationCustomFilter( BikeLogInServiceImpl bikeLogInService, Environment environment,
                                       AuthenticationManager manager) {
-        this.bikeLogInService= bikeLogInService;
+        this.bikeLogInService =bikeLogInService;
         this.environment = environment;
         super.setAuthenticationManager(manager);
     }
 
+    /**
+     * This method tries  to handle authenticate
+     * @param request
+     * @param response
+     * @return authenticationManager
+     * @throws AuthenticationException
+     */
     @SneakyThrows
     @Override
     public Authentication attemptAuthentication(
@@ -58,11 +70,20 @@ public class AuthenticationCustomFilter extends UsernamePasswordAuthenticationFi
         );
     }
 
+    /**
+     * This method attach jwt token
+     * @param request
+     * @param response
+     * @param chain
+     * @param authentication
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
                                             Authentication authentication) throws IOException, ServletException {
-        String userName = ((User) authentication.getPrincipal()).getUsername();
-        BikeCustomerSharedDTO sharedDTO = bikeLogInService.getUserDetailsByEmail(userName);
+        String userName = ((User) authentication.getPrincipal()).getPassword();
+        BikeCustomerSharedDTO sharedDTO = bikeLogInService.getUserDetailsByPassword(userName);
 
         String token = Jwts.builder()
                 .setSubject(String.valueOf(sharedDTO.getId()))

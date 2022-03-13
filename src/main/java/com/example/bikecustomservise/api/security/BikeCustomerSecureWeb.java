@@ -12,8 +12,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationFilter;
 
+/**
+ * Configuration for security  app via
+ * custom authentication filter
+ *
+ * @author shele
+ */
 @Configuration
 @EnableWebSecurity
 public class BikeCustomerSecureWeb extends WebSecurityConfigurerAdapter {
@@ -43,13 +48,11 @@ public class BikeCustomerSecureWeb extends WebSecurityConfigurerAdapter {
                 .permitAll();
         http.authorizeHttpRequests().antMatchers("/register/**")
                 .permitAll();
-        http.authorizeHttpRequests().antMatchers("/access/**").permitAll().
-                and()
-                .authorizeHttpRequests().antMatchers("/access/add").authenticated()
-                .and()
-                .addFilter(getAuthenticationFilter());
-
-        http.headers().frameOptions().disable();
+        http.authorizeHttpRequests().antMatchers("/access/**").permitAll();
+        http.addFilterBefore(getAuthenticationFilter(),AuthenticationCustomFilter.class)
+                        .authorizeHttpRequests()
+                                .antMatchers("/access/attach").authenticated();
+       http.headers().frameOptions().disable();
     }
 
     private AuthenticationCustomFilter getAuthenticationFilter() throws Exception {
@@ -59,7 +62,7 @@ public class BikeCustomerSecureWeb extends WebSecurityConfigurerAdapter {
 
     @Bean
     @Override
-    public AuthenticationManager authenticationManager()throws Exception{
+    public AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
     }
 

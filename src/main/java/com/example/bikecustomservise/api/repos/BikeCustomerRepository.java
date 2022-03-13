@@ -6,6 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * author shele
+ *
+ */
 public interface BikeCustomerRepository extends JpaRepository<BikeCustomer, Integer> {
 
     BikeCustomer findBikeCustomerById(Integer id);
@@ -16,6 +20,6 @@ public interface BikeCustomerRepository extends JpaRepository<BikeCustomer, Inte
 
     void deleteBikeCustomerById(Integer id);
 
-    BikeCustomer findByEmail(String email);
+    BikeCustomer findByPassword(String password);
 
 }

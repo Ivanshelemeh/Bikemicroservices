@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/access")
 public class LoginCustomerController {
 
-    @PostMapping("/add")
-    public ResponseEntity getAccess(@RequestBody BikeCustomerSingInModel dto){
+    @PostMapping("/attach")
+    public ResponseEntity postAccess(@RequestBody BikeCustomerSingInModel dto){
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
 
     }

@@ -1,23 +1,21 @@
 package com.example.bikecustomservise.api.controllertest;
 
-import com.example.bikecustomservise.api.rest.BikeCustomerController;
 import com.example.bikecustomservise.api.service.BikeCustomerServiceImpl;
 import com.example.bikecustomservise.api.utilit.BikeCustomerMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@ExtendWith(SpringExtension.class)
-@WebMvcTest(controllers = BikeCustomerController.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
 public class BikeCustomerControllerTest {
 
     @Autowired
@@ -36,6 +34,5 @@ public class BikeCustomerControllerTest {
                 .contentType("application/json")
         ).andExpect(status().isOk());
     }
-
 
 }

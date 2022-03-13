@@ -8,5 +8,5 @@ public interface BikeLogInService extends UserDetailsService {
 
     BikeCustomerSharedDTO create(BikeCustomerSharedDTO dto);
 
-    BikeCustomerSharedDTO getUserDetailsByEmail(String email);
+    BikeCustomerSharedDTO getUserDetailsByPassword(String password);
 }
