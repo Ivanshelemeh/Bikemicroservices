@@ -44,27 +44,18 @@ public class BikeOrderServiceImpl implements BikeOrderService {
         return orderMapper.mapToOrderDto(bikeOrder);
     }
 
+    @SneakyThrows
     @Override
     public void deleteByOrderName(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("not such name ");
-        }
-        Optional<BikeOrder> optionalBikeOrder = orderRepository.findAll()
-                .stream().filter(order1 -> order1.getNameOrder().equals(name)).findFirst();
-        if (!optionalBikeOrder.isPresent()) {
-            BikeOrder bikeOrder = new BikeOrder();
-            bikeOrder.setNameOrder(name);
-            orderRepository.delete(bikeOrder);
-        }
+        Optional<BikeOrder> optionalBikeOrder = Optional.ofNullable(orderRepository.findAll()
+                .stream().filter(order1 -> order1.getNameOrder().equals(name)).findFirst()
+                .orElseThrow(() -> new NoSuchFieldException("not such name present")));
         orderRepository.delete(optionalBikeOrder.get());
     }
 
     @Override
     public BikeOrder saveOrder(@NotNull @Validated BikeOrder order) {
-        if (order == null) {
-            throw new IllegalArgumentException("not such order exits");
-        }
-        orderRepository.save(order);
-        return order;
+        return Optional.ofNullable(orderRepository.save(order))
+                .orElseThrow(() -> new IllegalArgumentException("not such valid order exists"));
     }
 }

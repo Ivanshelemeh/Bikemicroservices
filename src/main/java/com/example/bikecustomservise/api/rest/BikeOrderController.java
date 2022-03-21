@@ -20,8 +20,7 @@ public class BikeOrderController {
     }
 
     /**
-     * Find all orders in db
-     *
+     * Fetch all records of orders from db
      * @return should return status 200
      */
     @GetMapping(value = "/orders", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -31,10 +30,9 @@ public class BikeOrderController {
     }
 
     /**
-     * Delete order with specify name
-     *
+     * Delete order with specific  name
      * @param name
-     * @return 204 status after removed raw in db
+     * @return 204 status code after removed raw in db
      */
     @DeleteMapping("/{name}")
     public ResponseEntity<BikeOrder> removeOrder(@PathVariable String name) {
@@ -43,7 +41,7 @@ public class BikeOrderController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<BikeOrder> addOrder(@RequestBody BikeOrder order) {
+    public ResponseEntity<BikeOrder> createOrder(@RequestBody BikeOrder order) {
         bikeOrderService.saveOrder(order);
         return ResponseEntity.accepted().build();
     }

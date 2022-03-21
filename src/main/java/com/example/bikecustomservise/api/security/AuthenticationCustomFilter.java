@@ -2,15 +2,12 @@ package com.example.bikecustomservise.api.security;
 
 import com.example.bikecustomservise.api.dto.BikeCustomerSharedDTO;
 import com.example.bikecustomservise.api.dto.BikeCustomerSingInModel;
-import com.example.bikecustomservise.api.service.BikeCustomerServiceImpl;
-import com.example.bikecustomservise.api.service.BikeLogInService;
 import com.example.bikecustomservise.api.service.BikeLogInServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

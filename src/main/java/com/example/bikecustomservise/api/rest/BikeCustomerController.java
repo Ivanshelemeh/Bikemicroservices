@@ -29,7 +29,7 @@ public class BikeCustomerController {
     }
 
     @GetMapping("/list")
-    public List<BikeCustomerDTO> customerDTOList() {
+    public List<BikeCustomerDTO> getCustomerDTOList() {
         List<BikeCustomerDTO> bikeCustomerDTOS = service.findAll().stream()
                 .map(customerMapper::mapToDTO).collect(Collectors.toList());
         return bikeCustomerDTOS;
