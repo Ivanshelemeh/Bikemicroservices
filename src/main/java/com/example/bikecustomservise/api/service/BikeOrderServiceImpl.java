@@ -34,12 +34,12 @@ public class BikeOrderServiceImpl implements BikeOrderService {
 
     @Override
     @SneakyThrows
-    public BikeOrderDTO findOrderById(Integer price) {
+    public BikeOrderDTO findOrderByPrice(Double price) {
         if (price < 0) {
             throw new NoSuchFieldException("not such price available");
         }
         BikeOrder bikeOrder = new BikeOrder();
-        bikeOrder.setPriceOrder(Double.valueOf(price));
+        bikeOrder.setPriceOrder(price);
         orderRepository.save(bikeOrder);
         return orderMapper.mapToOrderDto(bikeOrder);
     }
