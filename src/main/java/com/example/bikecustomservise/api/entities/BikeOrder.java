@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class BikeOrder implements Serializable {
     private Integer id;
 
     @Column(name = "product_name", unique = true)
+    @NotNull
     private String nameOrder;
 
     @Column(name = "price")
