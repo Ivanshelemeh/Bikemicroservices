@@ -29,8 +29,6 @@ public class BikeCustomerRepoTest {
     @Autowired
     private TestEntityManager testEntityManager;
 
-    @Autowired
-    private DataSource source;
 
     @Test
     @Sql("/insert-test.sql")
