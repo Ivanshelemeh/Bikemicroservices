@@ -5,6 +5,9 @@ import com.example.bikecustomservise.api.repos.BikeCustomerRepository;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -27,6 +30,7 @@ public class BikeCustomerServiceImpl implements BikeCustomerService {
 
 
     @Override
+    @Cacheable(value = "redisCache")
     public List<BikeCustomer> findAll() {
         return bikeCustomerRepository.findAll()
                 .stream().collect(Collectors.toList());
@@ -35,6 +39,7 @@ public class BikeCustomerServiceImpl implements BikeCustomerService {
     @Override
     @SneakyThrows
     @Transactional
+    @CachePut(value = "redisCache", key = "#id")
     public BikeCustomer findOne(Integer id) {
         Optional<BikeCustomer> optional = Optional.of(new BikeCustomer());
         if (optional.isPresent()) {
@@ -46,6 +51,7 @@ public class BikeCustomerServiceImpl implements BikeCustomerService {
     }
 
     @Override
+    @CacheEvict(value = "redisCache", key = "#id")
     public void deleteBikeCustomerById(Integer id) {
         BikeCustomer bikeCustomer = bikeCustomerRepository.findBikeCustomerById(id);
         bikeCustomerRepository.delete(bikeCustomer);
@@ -64,6 +70,7 @@ public class BikeCustomerServiceImpl implements BikeCustomerService {
     }
 
     @SneakyThrows
+    @CachePut(value = "redisCache",key = "#bikeCustomer.nickName")
     public void updateNickName(String name, BikeCustomer bikeCustomer) {
         if (name == null) {
             throw new NoSuchFieldException("not such name found");
@@ -76,13 +83,4 @@ public class BikeCustomerServiceImpl implements BikeCustomerService {
         bikeCustomerRepository.save(bikeCustomer1);
     }
 
-    @SneakyThrows
-    public void removeBikeCustomer(Integer id) {
-        if (id == null) {
-            log.error("id could not be empty" + id);
-            throw new NoSuchFieldException("not found id");
-        }
-        bikeCustomerRepository.deleteBikeCustomerById(id);
-
-    }
 }

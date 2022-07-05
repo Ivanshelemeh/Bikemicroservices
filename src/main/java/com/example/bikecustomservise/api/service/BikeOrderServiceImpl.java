@@ -6,6 +6,8 @@ import com.example.bikecustomservise.api.repos.BikeOrderRepository;
 import com.example.bikecustomservise.api.utilit.BikeOrderMapper;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -27,6 +29,7 @@ public class BikeOrderServiceImpl implements BikeOrderService {
     }
 
     @Override
+    @Cacheable(value = "cacheConf",unless = "#result.shares<100")
     public List<BikeOrderDTO> findAllOrders() {
         return orderRepository.findAll().stream()
                 .map(orderMapper::mapToOrderDto).collect(Collectors.toList());
@@ -46,6 +49,7 @@ public class BikeOrderServiceImpl implements BikeOrderService {
 
     @SneakyThrows
     @Override
+    @CacheEvict(value = "cacheConf",key = "#name")
     public void deleteByOrderName(String name) {
         Optional<BikeOrder> optionalBikeOrder = Optional.ofNullable(orderRepository.findAll()
                 .stream().filter(order1 -> order1.getNameOrder().equals(name)).findFirst()
