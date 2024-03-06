@@ -37,7 +37,8 @@ public class BikeCustomerMapper {
     public List<BikeCustomer> mapToListCustomer(List<BikeCustomerDTO> customerDTOList) {
         MODEL_MAPPER.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         List<BikeCustomer> list = new ArrayList<>();
-        list.forEach(bikeCustomer -> customerDTOList.add(MODEL_MAPPER.map(bikeCustomer, BikeCustomerDTO.class)));
+        list.forEach(bikeCustomer ->
+                customerDTOList.add(MODEL_MAPPER.map(bikeCustomer, BikeCustomerDTO.class)));
         return list;
     }
 

@@ -62,7 +62,7 @@ public class BikeCustomerController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<BikeCustomer> deleteCustomer(@PathVariable Integer id) {
-        service.removeBikeCustomer(id);
+        service.deleteBikeCustomerById(id);
         return ResponseEntity.noContent().build();
     }
 }

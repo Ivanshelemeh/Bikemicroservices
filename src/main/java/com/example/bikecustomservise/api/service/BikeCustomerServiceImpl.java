@@ -9,15 +9,16 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-@Transactional
 public class BikeCustomerServiceImpl implements BikeCustomerService {
 
     private final BikeCustomerRepository bikeCustomerRepository;
@@ -32,8 +33,7 @@ public class BikeCustomerServiceImpl implements BikeCustomerService {
     @Override
     @Cacheable(value = "redisCache")
     public List<BikeCustomer> findAll() {
-        return bikeCustomerRepository.findAll()
-                .stream().collect(Collectors.toList());
+        return bikeCustomerRepository.findAll();
     }
 
     @Override
@@ -42,12 +42,9 @@ public class BikeCustomerServiceImpl implements BikeCustomerService {
     @CachePut(value = "redisCache", key = "#id")
     public BikeCustomer findOne(Integer id) {
         Optional<BikeCustomer> optional = Optional.of(new BikeCustomer());
-        if (optional.isPresent()) {
-            BikeCustomer customer = optional.get();
-            bikeCustomerRepository.save(customer);
-            return customer;
-        }
-        return null;
+        BikeCustomer customer = optional.get();
+        bikeCustomerRepository.save(customer);
+        return customer;
     }
 
     @Override
@@ -73,7 +70,7 @@ public class BikeCustomerServiceImpl implements BikeCustomerService {
     @CachePut(value = "redisCache",key = "#bikeCustomer.nickName")
     public void updateNickName(String name, BikeCustomer bikeCustomer) {
         if (name == null) {
-            throw new NoSuchFieldException("not such name found");
+            throw new NoSuchFieldException("not such" + name + " found");
         }
         bikeCustomerRepository.deleteAll();
         BikeCustomer bikeCustomer1 = new BikeCustomer();
