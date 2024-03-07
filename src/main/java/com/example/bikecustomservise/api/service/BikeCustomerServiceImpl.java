@@ -34,6 +34,7 @@ public class BikeCustomerServiceImpl implements BikeCustomerService {
     @Cacheable(value = "redisCache")
     public List<BikeCustomer> findAll() {
         return bikeCustomerRepository.findAll();
+
     }
 
     @Override
