@@ -4,11 +4,14 @@ import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.Instant;
 
 @Entity
 @Table(name = "bike_customer")
@@ -38,4 +41,15 @@ public class BikeCustomer implements Serializable {
     @ManyToOne(targetEntity = BikeOrder.class,cascade = CascadeType.ALL)
     @JoinColumn(name = "id",insertable = false, updatable = false)
     private BikeOrder order;
+
+    @Version
+    private int versionId;
+
+    @CreatedDate
+    @Column(name = "create_at")
+    private Instant createdAt;
+
+    @LastModifiedDate
+    @Column(name = "lastmodify_at")
+    private Instant lastModified;
 }

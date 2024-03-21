@@ -3,10 +3,13 @@ package com.example.bikecustomservise.api.entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -30,4 +33,15 @@ public class BikeOrder implements Serializable {
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "id")
    // @JoinColumn(name = "id", insertable = false, updatable = true, referencedColumnName = "id", nullable = true)
     private List<BikeCustomer> bikeCustomerList;
+
+    @Version
+    private int version;
+
+    @CreatedDate
+    @Column(name = "created_at")
+    private Instant createdAt;
+
+    @LastModifiedDate
+    @Column(name = "lastmod_at")
+    private Instant lastModified;
 }
