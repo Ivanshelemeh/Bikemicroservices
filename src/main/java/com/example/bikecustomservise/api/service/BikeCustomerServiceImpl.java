@@ -1,6 +1,9 @@
 package com.example.bikecustomservise.api.service;
 
+import com.example.bikecustomservise.api.annotation.AsyncRunnerAnnotation;
 import com.example.bikecustomservise.api.entities.BikeCustomer;
+import com.example.bikecustomservise.api.exception.ApplicationErrorEnum;
+import com.example.bikecustomservise.api.exception.ServiceProccessingException;
 import com.example.bikecustomservise.api.repos.BikeCustomerRepository;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.example.bikecustomservise.api.exception.ApplicationErrorEnum.EMPTY_CUSTOMER_NAME;
+import static com.example.bikecustomservise.api.exception.ApplicationErrorEnum.INCORRECT_INPUT;
 
 @Service
 @Slf4j
@@ -58,10 +64,11 @@ public class BikeCustomerServiceImpl implements BikeCustomerService {
 
     @Override
     @SneakyThrows
+    @AsyncRunnerAnnotation
     public BikeCustomer save(BikeCustomer customer) {
-
         if (customer == null) {
-            throw new NoSuchFieldException("Not found");
+            log.error("a customer is not found ");
+            throw new ServiceProccessingException(INCORRECT_INPUT);
         }
         bikeCustomerRepository.save(customer);
         return customer;
@@ -70,8 +77,8 @@ public class BikeCustomerServiceImpl implements BikeCustomerService {
     @SneakyThrows
     @CachePut(value = "redisCache",key = "#bikeCustomer.nickName")
     public void updateNickName(String name, BikeCustomer bikeCustomer) {
-        if (name == null) {
-            throw new NoSuchFieldException("not such" + name + " found");
+        if (name == null || name.isEmpty()) {
+            throw new ServiceProccessingException(EMPTY_CUSTOMER_NAME);
         }
         bikeCustomerRepository.deleteAll();
         BikeCustomer bikeCustomer1 = new BikeCustomer();

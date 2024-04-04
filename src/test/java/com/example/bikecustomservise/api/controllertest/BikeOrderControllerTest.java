@@ -12,6 +12,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 
+import java.util.Collections;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,7 +41,7 @@ public class BikeOrderControllerTest {
     @Test
     @SneakyThrows
     void whenNull_thenReturn404(){
-        BikeOrder order = new BikeOrder(2,null,22.34,null);
+        BikeOrder order = new BikeOrder();
         mockMvc.perform(post("/order/add")
                 .contentType("application/json")
         ).andExpect(status().isBadRequest());

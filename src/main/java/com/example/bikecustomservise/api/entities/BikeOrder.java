@@ -17,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@NamedEntityGraph(name = "order-graph",attributeNodes = {@NamedAttributeNode(value = "customers")})
 public class BikeOrder implements Serializable {
 
     @Id
@@ -32,7 +33,7 @@ public class BikeOrder implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "id")
    // @JoinColumn(name = "id", insertable = false, updatable = true, referencedColumnName = "id", nullable = true)
-    private List<BikeCustomer> bikeCustomerList;
+    private List<BikeCustomer> customers;
 
     @Version
     private int version;

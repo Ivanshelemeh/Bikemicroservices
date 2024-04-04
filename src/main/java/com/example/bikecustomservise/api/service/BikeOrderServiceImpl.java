@@ -1,10 +1,12 @@
 package com.example.bikecustomservise.api.service;
 
+import com.example.bikecustomservise.api.annotation.AsyncRunnerAnnotation;
 import com.example.bikecustomservise.api.dto.BikeOrderDTO;
 import com.example.bikecustomservise.api.entities.BikeOrder;
 import com.example.bikecustomservise.api.repos.BikeOrderRepository;
 import com.example.bikecustomservise.api.utilit.BikeOrderMapper;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,6 +19,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class BikeOrderServiceImpl implements BikeOrderService {
 
     private final BikeOrderRepository orderRepository;
@@ -58,6 +61,7 @@ public class BikeOrderServiceImpl implements BikeOrderService {
     }
 
     @Override
+    @AsyncRunnerAnnotation
     public BikeOrder saveOrder(@NotNull @Validated BikeOrder order) {
         return Optional.ofNullable(orderRepository.save(order))
                 .orElseThrow(() -> new IllegalArgumentException("not such valid order exists"));

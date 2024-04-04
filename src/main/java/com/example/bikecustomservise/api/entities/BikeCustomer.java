@@ -18,6 +18,7 @@ import java.time.Instant;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@NamedEntityGraph(name = "bikecustomer-graph",attributeNodes = {@NamedAttributeNode(value = "order")})
 public class BikeCustomer implements Serializable {
 
 
