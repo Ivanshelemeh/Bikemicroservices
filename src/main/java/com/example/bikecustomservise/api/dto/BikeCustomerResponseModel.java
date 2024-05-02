@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 @Setter
 public class BikeCustomerResponseModel {
 
+
     private String nameCustomer;
     private String passwordCustomer;
     private String email;

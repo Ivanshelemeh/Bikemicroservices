@@ -48,6 +48,7 @@ public class BikeCustomerSecureWeb extends WebSecurityConfigurerAdapter {
                 .permitAll();
         http.authorizeHttpRequests().antMatchers("/register/**")
                 .permitAll();
+        http.authorizeHttpRequests().antMatchers("/actuator/**").permitAll();
         http.authorizeHttpRequests().antMatchers("/access/**").permitAll();
         http.addFilterBefore(getAuthenticationFilter(),AuthenticationCustomFilter.class)
                         .authorizeHttpRequests()

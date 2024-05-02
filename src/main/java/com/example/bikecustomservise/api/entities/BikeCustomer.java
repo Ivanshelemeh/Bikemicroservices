@@ -1,5 +1,6 @@
 package com.example.bikecustomservise.api.entities;
 
+import com.example.bikecustomservise.api.validation.CustomNameValid;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,6 +29,7 @@ public class BikeCustomer implements Serializable {
 
     @NotNull
     @Column(unique = true, name = "nickname")
+    @CustomNameValid
     private String nickName;
 
     @Column(name = "mail",nullable = false, unique = true)

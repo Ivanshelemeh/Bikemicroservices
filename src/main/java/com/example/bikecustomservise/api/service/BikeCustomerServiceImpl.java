@@ -15,8 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -76,8 +78,8 @@ public class BikeCustomerServiceImpl implements BikeCustomerService {
 
     @SneakyThrows
     @CachePut(value = "redisCache",key = "#bikeCustomer.nickName")
-    public void updateNickName(String name, BikeCustomer bikeCustomer) {
-        if (name == null || name.isEmpty()) {
+    public void updateCustomerName(String name, @NotNull BikeCustomer bikeCustomer) {
+        if (name == null || name.isEmpty() && Objects.isNull(bikeCustomer)) {
             throw new ServiceProccessingException(EMPTY_CUSTOMER_NAME);
         }
         bikeCustomerRepository.deleteAll();
