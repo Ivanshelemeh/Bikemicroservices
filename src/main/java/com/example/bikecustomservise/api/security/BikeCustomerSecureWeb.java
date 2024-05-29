@@ -24,9 +24,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class BikeCustomerSecureWeb extends WebSecurityConfigurerAdapter {
 
 
-    private BikeLogInServiceImpl bikeLogInService;
-    private BCryptPasswordEncoder passwordEncoder;
-    private Environment env;
+    private final BikeLogInServiceImpl bikeLogInService;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final Environment env;
 
 
     @Autowired

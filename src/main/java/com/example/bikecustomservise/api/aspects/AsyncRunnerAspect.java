@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 @Order(1)
 public class AsyncRunnerAspect {
 
-    @Pointcut("execution(@com.example.bikecustomservise.api.annotation.AsyncRunnerAnnotation public void save*(..))")
+    @Pointcut("execution(@com.example.bikecustomservise.api.annotation.AsyncRunnerAnnotation public void save*(..)))")
     public void asyncRunnerPointcut() {
     }
 
@@ -32,4 +32,5 @@ public class AsyncRunnerAspect {
         });
 
     }
+
 }

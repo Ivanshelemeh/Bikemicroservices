@@ -13,7 +13,7 @@ public interface BikeCustomerService {
 
     void deleteBikeCustomerById(Integer id);
 
-    BikeCustomer save(BikeCustomer customer);
+    void save(BikeCustomer customer);
 
 
 }

@@ -16,7 +16,8 @@ public enum ApplicationErrorEnum {
     INCORRECT_INPUT(4001,"The inputs data did not pass validation"),
     USER_PARAMS_INCORRECT(4002,"Request body are invalid or empty"),
     EMPTY_REQUEST(4004,"The request is empty"),
-    EMPTY_CUSTOMER_NAME(4005,"A customer's name is empty");
+    EMPTY_CUSTOMER_NAME(4005,"A customer's name is empty"),
+    NOT_FOUND_CUSTOMER(4006,"A customer is not found now !");
     private final int code;
     private final String message;
 }

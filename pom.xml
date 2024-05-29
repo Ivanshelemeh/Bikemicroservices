@@ -154,7 +154,21 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <properties>
+                        <configurationParameters>
+                            junit.jupiter.execution.parallel.enabled = true
+                            junit.jupiter.execution.parallel.mode.default = concurrent
+                            junit.jupiter.execution.parallel.config.strategy = fixed
+                            junit.jupiter.execution.parallel.config.fixed.parallelism = 2
+                        </configurationParameters>
+                    </properties>
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                    <reportsDirectory>${project.build.directory}/test-reports</reportsDirectory>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-
 </project>

@@ -32,7 +32,6 @@ public class BikeOrder implements Serializable {
     private double priceOrder;
 
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "id")
-   // @JoinColumn(name = "id", insertable = false, updatable = true, referencedColumnName = "id", nullable = true)
     private List<BikeCustomer> customers;
 
     @Version

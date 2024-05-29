@@ -5,9 +5,9 @@ import com.example.bikecustomservise.api.entities.BikeCustomer;
 import com.example.bikecustomservise.api.service.BikeCustomerServiceImpl;
 import com.example.bikecustomservise.api.utilit.BikeCustomerMapper;
 import com.example.bikecustomservise.api.validation.CustomNameValid;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,16 +20,12 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/customer")
 @Slf4j
+@RequiredArgsConstructor
 public class BikeCustomerController {
 
     private final BikeCustomerServiceImpl service;
     private final BikeCustomerMapper customerMapper;
 
-    @Autowired
-    public BikeCustomerController(BikeCustomerServiceImpl service, BikeCustomerMapper customerMapper) {
-        this.service = service;
-        this.customerMapper = customerMapper;
-    }
 
     @GetMapping("/list")
     public List<BikeCustomerDTO> getCustomers() {
@@ -59,7 +55,7 @@ public class BikeCustomerController {
         if (nickName.isEmpty()) {
             ResponseEntity.noContent().build();
         }
-        this.service.updateCustomerName(nickName, customer);
+        this.service.updateNickName(nickName, customer);
         return new ResponseEntity<>("changed", HttpStatus.CREATED);
 
     }
