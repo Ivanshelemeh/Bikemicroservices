@@ -1,13 +1,10 @@
 package com.example.bikecustomservise.api.repos;
 
 import com.example.bikecustomservise.api.entities.BikeCustomer;
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 
-import java.util.Collection;
+import javax.persistence.QueryHint;
 import java.util.List;
 
 /**
@@ -32,6 +29,7 @@ public interface BikeCustomerRepository extends JpaRepository<BikeCustomer, Inte
 
     @EntityGraph(value = "bikecustomer-graph", attributePaths = {"order"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("select bk from BikeCustomer bk where bk.password =: password group by bk.password")
+    @QueryHints(value = {@QueryHint(name = "org.hibernate.readOnly", value = "true")})
     BikeCustomer findByPassword(@Param("password") String password);
 
 }
