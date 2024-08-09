@@ -5,15 +5,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 @EnableEurekaClient
 @EnableCaching
-public class BikeCustomServiseApplication {
+@EnableScheduling
+public class BikeCustomerServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(BikeCustomServiseApplication.class, args);
+        SpringApplication.run(BikeCustomerServiceApplication.class, args);
     }
 
     @Bean

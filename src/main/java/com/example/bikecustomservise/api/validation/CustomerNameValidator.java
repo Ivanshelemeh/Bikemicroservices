@@ -5,7 +5,7 @@ import javax.validation.ConstraintValidatorContext;
 
 public class CustomerNameValidator implements ConstraintValidator<CustomNameValid, String> {
 
-    private final String PATTERN_NAME_VALID = "[a-zA-Z0-9_.-]";
+    private static final String PATTERN_NAME_VALID = "[a-zA-Z0-9_.-]";
 
     @Override
     public boolean isValid(String customerName, ConstraintValidatorContext constraintValidatorContext) {

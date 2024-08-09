@@ -1,0 +1,1 @@
+insert into  bike_customer values (22,"Valentine","valet0944@gmail.com,","vaalet1990ASD");
