@@ -1,19 +1,20 @@
 package com.example.bikecustomservise.api.service;
 
-import com.example.bikecustomservise.api.entities.BikeCustomer;
-
-import java.util.List;
-import java.util.Optional;
+import com.example.bikecustomservise.api.model.BikeCustomerFind;
+import com.example.bikecustomservise.api.model.BikeCustomerModel;
+import com.example.bikecustomservise.api.model.BikeCustomerUpdateModel;
+import com.example.bikecustomservise.api.model.PageRs;
 
 public interface BikeCustomerService {
 
-    List<BikeCustomer> findAll();
+    PageRs<BikeCustomerModel> findAll(final BikeCustomerFind customerFind);
 
-    BikeCustomer findOne(Integer id);
+    BikeCustomerModel findCustomer(Integer id);
 
     void deleteBikeCustomerById(Integer id);
 
-    void save(BikeCustomer customer);
+    void save(BikeCustomerModel customer);
 
+    BikeCustomerModel update(final String name, final BikeCustomerUpdateModel updateModel);
 
 }

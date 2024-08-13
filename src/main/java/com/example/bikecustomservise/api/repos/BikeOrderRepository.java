@@ -8,10 +8,11 @@ import org.springframework.data.jpa.repository.QueryHints;
 
 import javax.persistence.QueryHint;
 import java.util.List;
+import java.util.Optional;
 
 public interface BikeOrderRepository extends JpaRepository<BikeOrder, Integer> {
     @EntityGraph(value = "order-graph", attributePaths = {"customers"}, type = EntityGraph.EntityGraphType.LOAD)
-    BikeOrder findBikeOrderById(Integer id);
+    Optional<BikeOrder> findBikeOrderById(Integer id);
 
     void deleteBikeOrderById(Integer id);
 

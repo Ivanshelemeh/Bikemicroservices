@@ -5,6 +5,7 @@ import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -43,6 +44,7 @@ public class BikeCustomer implements Serializable {
 
     @ManyToOne(targetEntity = BikeOrder.class,cascade = CascadeType.ALL)
     @JoinColumn(name = "id",insertable = false, updatable = false)
+    @BatchSize(size = 100)
     private BikeOrder order;
 
     @Version

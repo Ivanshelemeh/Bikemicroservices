@@ -1,12 +1,10 @@
 package com.example.bikecustomservise.api.dto;
 
 
-import com.example.bikecustomservise.api.entities.BikeOrder;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -20,7 +18,9 @@ public class CustomerAvroDto {
     private String customerName;
     @NotNull
     private String customerEmail;
-
-    private Set<BikeOrder> orders;
+    @NotNull
+    private String orderName;
+    @NotNull
+    private Double orderPrice;
 
 }

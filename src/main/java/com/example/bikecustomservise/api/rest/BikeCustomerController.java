@@ -1,68 +1,97 @@
 package com.example.bikecustomservise.api.rest;
 
 import com.example.bikecustomservise.api.dto.BikeCustomerDTO;
-import com.example.bikecustomservise.api.entities.BikeCustomer;
-import com.example.bikecustomservise.api.service.BikeCustomerServiceImpl;
-import com.example.bikecustomservise.api.utilit.BikeCustomerMapper;
+import com.example.bikecustomservise.api.dto.BikeCustomerUpdateDto;
+import com.example.bikecustomservise.api.model.*;
+import com.example.bikecustomservise.api.rest.api.BikeCustomerApi;
+import com.example.bikecustomservise.api.service.BikeCustomerService;
 import com.example.bikecustomservise.api.validation.CustomNameValid;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 @RestController
-@RequestMapping("/customer")
 @Slf4j
 @RequiredArgsConstructor
-public class BikeCustomerController {
+public class BikeCustomerController implements BikeCustomerApi {
 
-    private final BikeCustomerServiceImpl service;
-    private final BikeCustomerMapper customerMapper;
+    private final BikeCustomerService service;
 
+    @Override
+    public ResponseEntity<PageDtoRs<BikeCustomerModel>> find(int size, int page) {
+        final var customPage = service.findAll(
+                new BikeCustomerFind(
+                        new PageRq(size, page)
+                )
+        );
+        return ResponseEntity.ok(new PageDtoRs<>(
+                customPage.content(),
+                customPage.pageSize(),
+                customPage.hasNext(),
+                customPage.pageNumber(),
+                customPage.totalElements()
 
-    @GetMapping("/list")
-    public List<BikeCustomerDTO> getCustomers() {
-        return service.findAll().stream()
-                 .map(customerMapper::mapToDTO).collect(Collectors.toList());
-
+        ));
 
     }
 
-    @PostMapping(value = "/bike", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BikeCustomer> createCustomer(@Validated @RequestBody BikeCustomerDTO dto) {
-        if (dto == null) {
+    @Override
+    public ResponseEntity<BikeCustomerModel> getCustomer(final Integer id) {
+        return ResponseEntity.ok(service.findCustomer(id));
+
+    }
+
+    @Override
+    public ResponseEntity<UpdateResponse> createCustomer(@Validated @RequestBody BikeCustomerDTO dto) {
+        if (Objects.isNull(dto)) {
             log.error(" there is no any customer {}", dto);
             return ResponseEntity.noContent().build();
         }
-        BikeCustomer bikeCustomer = customerMapper.mapToEntity(dto);
-        service.save(bikeCustomer);
-        return ResponseEntity.ok(bikeCustomer);
+        final var bikeModel = mapFromDto(dto);
+        service.save(bikeModel);
+        return ResponseEntity.ok(new UpdateResponse(bikeModel.customerEmail()));
 
     }
 
-    @PutMapping(value = "/update/{nickName}", consumes = {MediaType.APPLICATION_JSON_VALUE}
-            , produces = {MediaType.APPLICATION_JSON_VALUE})
-    @SneakyThrows
-    public ResponseEntity<String> updateCustomer(@PathVariable("nickName") @CustomNameValid String nickName,
-                                                 @RequestBody @Validated BikeCustomer customer) {
+    @Override
+    public ResponseEntity<UpdateResponse> updateCustomer(@PathVariable("nickName") @CustomNameValid String nickName,
+                                                         @RequestBody @Validated BikeCustomerUpdateDto customer) {
         if (nickName.isEmpty()) {
             ResponseEntity.noContent().build();
         }
-        this.service.updateNickName(nickName, customer);
-        return new ResponseEntity<>("changed", HttpStatus.CREATED);
+        final var updateModel = service.update(nickName, mapFromUpdateDto(customer));
+        return ResponseEntity.ok(new UpdateResponse(updateModel.customerEmail()));
 
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<BikeCustomer> deleteCustomer(@PathVariable Integer id) {
+    @Override
+    public ResponseEntity<Void> deleteCustomer(@PathVariable @NonNull Integer id) {
         service.deleteBikeCustomerById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @NonNull
+    private BikeCustomerModel mapFromDto(final BikeCustomerDTO bikeCustomerDTO) {
+        return new BikeCustomerModel(
+                bikeCustomerDTO.getNickName(),
+                bikeCustomerDTO.getPassword(),
+                bikeCustomerDTO.getEmail()
+        );
+
+    }
+
+    @NonNull
+    private BikeCustomerUpdateModel mapFromUpdateDto(final BikeCustomerUpdateDto updateDto) {
+        return new BikeCustomerUpdateModel(
+                updateDto.name(),
+                updateDto.email()
+        );
     }
 }

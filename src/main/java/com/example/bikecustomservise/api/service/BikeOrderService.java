@@ -10,6 +10,8 @@ public interface BikeOrderService {
 
     List<BikeOrderDTO> findAllOrders();
 
+    BikeOrder findByOrderId(Integer id);
+
     BikeOrderDTO findOrderByPrice(Double price);
 
     void deleteByOrderName(String name);

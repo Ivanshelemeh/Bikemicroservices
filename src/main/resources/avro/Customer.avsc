@@ -21,24 +21,13 @@
       "type": "string"
     },
     {
-      "name": "orders",
-      "type": {
-        "type": "array",
-        "items": {
-          "name": "BikeOrder",
-          "type": "record",
-          "fields": [
-            {
-              "name": "nameOrder",
-              "type": "string",
-            },
-            {
-              "name": "priceOrder",
-              "type": "double"
-            }
-          ]
-        }
-      }
+      "name": "orderName",
+      "type": "string",
+    },
+    {
+      "name": "orderPrice",
+      "type": "double"
     }
+
   ]
 }
