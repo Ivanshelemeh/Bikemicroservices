@@ -3,6 +3,9 @@ package com.example.bikecustomservise.api.rest;
 import com.example.bikecustomservise.api.dto.BikeCustomerDTO;
 import com.example.bikecustomservise.api.dto.BikeCustomerUpdateDto;
 import com.example.bikecustomservise.api.model.*;
+import com.example.bikecustomservise.api.model.customer.BikeCustomerFind;
+import com.example.bikecustomservise.api.model.customer.BikeCustomerModel;
+import com.example.bikecustomservise.api.model.customer.BikeCustomerUpdateModel;
 import com.example.bikecustomservise.api.rest.api.BikeCustomerApi;
 import com.example.bikecustomservise.api.service.BikeCustomerService;
 import com.example.bikecustomservise.api.validation.CustomNameValid;
@@ -25,9 +28,10 @@ public class BikeCustomerController implements BikeCustomerApi {
     private final BikeCustomerService service;
 
     @Override
-    public ResponseEntity<PageDtoRs<BikeCustomerModel>> find(int size, int page) {
+    public ResponseEntity<PageDtoRs<BikeCustomerModel>> find(int size, int page, double price) {
         final var customPage = service.findAll(
                 new BikeCustomerFind(
+                        price,
                         new PageRq(size, page)
                 )
         );
@@ -43,13 +47,13 @@ public class BikeCustomerController implements BikeCustomerApi {
     }
 
     @Override
-    public ResponseEntity<BikeCustomerModel> getCustomer(final Integer id) {
+    public ResponseEntity<BikeCustomerModel> get(final Integer id) {
         return ResponseEntity.ok(service.findCustomer(id));
 
     }
 
     @Override
-    public ResponseEntity<UpdateResponse> createCustomer(@Validated @RequestBody BikeCustomerDTO dto) {
+    public ResponseEntity<UpdateResponse> create(@Validated @RequestBody BikeCustomerDTO dto) {
         if (Objects.isNull(dto)) {
             log.error(" there is no any customer {}", dto);
             return ResponseEntity.noContent().build();
@@ -61,7 +65,7 @@ public class BikeCustomerController implements BikeCustomerApi {
     }
 
     @Override
-    public ResponseEntity<UpdateResponse> updateCustomer(@PathVariable("nickName") @CustomNameValid String nickName,
+    public ResponseEntity<UpdateResponse> update(@PathVariable("nickName") @CustomNameValid String nickName,
                                                          @RequestBody @Validated BikeCustomerUpdateDto customer) {
         if (nickName.isEmpty()) {
             ResponseEntity.noContent().build();
@@ -72,8 +76,8 @@ public class BikeCustomerController implements BikeCustomerApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteCustomer(@PathVariable @NonNull Integer id) {
-        service.deleteBikeCustomerById(id);
+    public ResponseEntity<Void> delete(@PathVariable @NonNull String customerEmail) {
+        service.deleteCustomer(customerEmail);
         return ResponseEntity.noContent().build();
     }
 

@@ -1,8 +1,8 @@
 package com.example.bikecustomservise.api.service;
 
 import com.example.bikecustomservise.api.dto.CustomerAvroDto;
-import com.example.bikecustomservise.api.entities.BikeOrder;
-import com.example.bikecustomservise.api.model.BikeCustomerModel;
+import com.example.bikecustomservise.api.model.customer.BikeCustomerModel;
+import com.example.bikecustomservise.api.model.order.OrderModel;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.avro.file.DataFileWriter;
@@ -36,13 +36,13 @@ public class FilledCustomerAvroService {
 
     private CustomerAvroDto generateCustomerAvro(Integer customerId, Integer orderId) {
         final BikeCustomerModel customer = getBikeCustomer(customerId);
-        final BikeOrder bikeOrder = getBikeOrder(orderId);
+        final OrderModel bikeOrder = getBikeOrder(orderId);
         return CustomerAvroDto.builder()
                 .customerEmail(customer.customerEmail())
                 .customerName(customer.nameCustomer())
                 .dateTime(getNow())
-                .orderName(bikeOrder.getNameOrder())
-                .orderPrice(bikeOrder.getPriceOrder())
+                .orderName(bikeOrder.orderName())
+                .orderPrice(bikeOrder.orderPrice())
                 .build();
     }
 
@@ -53,7 +53,7 @@ public class FilledCustomerAvroService {
 
     }
 
-    private BikeOrder getBikeOrder(@NonNull final Integer id) {
+    private OrderModel getBikeOrder(@NonNull final Integer id) {
         return orderService.findByOrderId(id);
     }
 

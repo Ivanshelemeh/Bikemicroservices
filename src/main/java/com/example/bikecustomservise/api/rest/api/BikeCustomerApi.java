@@ -2,7 +2,7 @@ package com.example.bikecustomservise.api.rest.api;
 
 import com.example.bikecustomservise.api.dto.BikeCustomerDTO;
 import com.example.bikecustomservise.api.dto.BikeCustomerUpdateDto;
-import com.example.bikecustomservise.api.model.BikeCustomerModel;
+import com.example.bikecustomservise.api.model.customer.BikeCustomerModel;
 import com.example.bikecustomservise.api.model.PageDtoRs;
 import com.example.bikecustomservise.api.model.UpdateResponse;
 import com.example.bikecustomservise.api.validation.CustomNameValid;
@@ -16,18 +16,20 @@ public interface BikeCustomerApi {
 
     @GetMapping
     ResponseEntity<PageDtoRs<BikeCustomerModel>> find(@RequestParam int size,
-                                                      @RequestParam int page);
+                                                      @RequestParam int page,
+                                                      @RequestParam double price);
+
     @GetMapping("{/id}")
-    ResponseEntity<BikeCustomerModel> getCustomer(@PathVariable Integer id);
+    ResponseEntity<BikeCustomerModel> get(@PathVariable Integer id);
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<UpdateResponse> createCustomer(@Validated @RequestBody BikeCustomerDTO dto);
+    ResponseEntity<UpdateResponse> create(@Validated @RequestBody BikeCustomerDTO dto);
 
     @PatchMapping(value = "/{nickName}", consumes = {MediaType.APPLICATION_JSON_VALUE}
             , produces = {MediaType.APPLICATION_JSON_VALUE})
-    ResponseEntity<UpdateResponse> updateCustomer(@PathVariable("nickName") @CustomNameValid String nickName,
+    ResponseEntity<UpdateResponse> update(@PathVariable("nickName") @CustomNameValid String nickName,
                                                   @RequestBody @Validated BikeCustomerUpdateDto updateDto);
 
-    @DeleteMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> deleteCustomer(@PathVariable Integer id);
+    @DeleteMapping(value = "/{email}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Void> delete(@PathVariable String email);
 }

@@ -1,15 +1,16 @@
-package com.example.bikecustomservise.api.dto;
+package com.example.bikecustomservise.api.model.order;
 
 import com.example.bikecustomservise.api.validation.CustomNameValid;
 import org.springframework.lang.NonNull;
 
 import javax.validation.constraints.Positive;
 
-public record BikeOrderDTO(
+public record OrderModel(
         @NonNull
         @CustomNameValid
         String orderName,
         @Positive
-        double priceOrder
+        @NonNull
+        double orderPrice
 ) {
 }

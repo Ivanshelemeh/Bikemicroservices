@@ -1,0 +1,1 @@
+OPTIMIZE table bike_customer, bike_order;

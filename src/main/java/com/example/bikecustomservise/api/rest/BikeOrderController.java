@@ -1,48 +1,71 @@
 package com.example.bikecustomservise.api.rest;
 
+import com.example.bikecustomservise.api.dto.BikeOrderCreateDTO;
 import com.example.bikecustomservise.api.dto.BikeOrderDTO;
-import com.example.bikecustomservise.api.entities.BikeOrder;
-import com.example.bikecustomservise.api.service.BikeOrderServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import com.example.bikecustomservise.api.model.PageDtoRs;
+import com.example.bikecustomservise.api.model.PageRq;
+import com.example.bikecustomservise.api.model.UpdateResponse;
+import com.example.bikecustomservise.api.model.order.OrderCreateModel;
+import com.example.bikecustomservise.api.model.order.OrderFindModel;
+import com.example.bikecustomservise.api.model.order.OrderModel;
+import com.example.bikecustomservise.api.rest.api.BikeOrderApi;
+import com.example.bikecustomservise.api.service.BikeOrderService;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.lang.NonNull;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/order")
-public class BikeOrderController {
+@RequiredArgsConstructor
+public class BikeOrderController implements BikeOrderApi {
 
-    private final BikeOrderServiceImpl bikeOrderService;
+    private final BikeOrderService bikeOrderService;
 
-    @Autowired
-    public BikeOrderController(BikeOrderServiceImpl bikeOrderService) {
-        this.bikeOrderService = bikeOrderService;
+    @Override
+    public ResponseEntity<PageDtoRs<OrderModel>> find(double priceOrder, int size, int page) {
+        final var orderPage = bikeOrderService.find(
+                new OrderFindModel(priceOrder,
+                        new PageRq(size, page))
+        );
+        return ResponseEntity.ok(new PageDtoRs<>(
+                orderPage.content(),
+                orderPage.pageSize(),
+                orderPage.hasNext(),
+                orderPage.pageNumber(),
+                orderPage.totalElements()
+        ));
     }
 
-    /**
-     * Fetch all records of orders from db
-     * @return should return status 200
-     */
-    @GetMapping(value = "/orders", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BikeOrderDTO> getAllOrder() {
-        bikeOrderService.findAllOrders();
-        return ResponseEntity.ok().build();
+    @Override
+    public ResponseEntity<BikeOrderDTO> getOrder(@NonNull final Integer orderId) {
+        final var orderDTO = mapFromModel(bikeOrderService.findByOrderId(orderId));
+        return ResponseEntity.ok(orderDTO);
     }
 
-    /**
-     * Delete order with specific  name
-     * @param name
-     * @return 204 status code after removed raw in db
-     */
-    @DeleteMapping("/{name}")
-    public ResponseEntity<BikeOrder> removeOrder(@PathVariable String name) {
+    @SneakyThrows
+    @Override
+    public ResponseEntity<UpdateResponse> createOrder(@NonNull final BikeOrderCreateDTO createDTO) {
+        final var order = bikeOrderService.saveOrder(mapFromDTO(createDTO));
+        return ResponseEntity.ok(new UpdateResponse(order.getNameOrder()));
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteOrder(String name) {
         bikeOrderService.deleteByOrderName(name);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<BikeOrder> createOrder(@RequestBody BikeOrder order) {
-        bikeOrderService.saveOrder(order);
-        return ResponseEntity.accepted().build();
+    private BikeOrderDTO mapFromModel(final OrderModel orderModel) {
+        return new BikeOrderDTO(orderModel.orderName(),
+                orderModel.orderPrice());
+    }
+
+    private OrderCreateModel mapFromDTO(final BikeOrderCreateDTO orderCreateDTO) {
+        return new OrderCreateModel(
+                orderCreateDTO.orderName(),
+                orderCreateDTO.email(),
+                orderCreateDTO.orderCost()
+        );
     }
 }

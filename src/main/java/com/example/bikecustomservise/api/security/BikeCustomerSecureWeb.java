@@ -1,6 +1,5 @@
 package com.example.bikecustomservise.api.security;
 
-import com.example.bikecustomservise.api.service.BikeLogInService;
 import com.example.bikecustomservise.api.service.BikeLogInServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +29,9 @@ public class BikeCustomerSecureWeb extends WebSecurityConfigurerAdapter {
 
 
     @Autowired
-    public BikeCustomerSecureWeb(BikeLogInServiceImpl bikeLogInService, BCryptPasswordEncoder passwordEncoder, Environment env) {
+    public BikeCustomerSecureWeb(BikeLogInServiceImpl bikeLogInService,
+                                 BCryptPasswordEncoder passwordEncoder,
+                                 Environment env) {
         this.bikeLogInService = bikeLogInService;
         this.passwordEncoder = passwordEncoder;
         this.env = env;
@@ -44,21 +45,22 @@ public class BikeCustomerSecureWeb extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.authorizeHttpRequests().antMatchers("/customer/**")
+        http.authorizeHttpRequests().antMatchers("/rest/api/v1/customers/**")
                 .permitAll();
-        http.authorizeHttpRequests().antMatchers("/register/**")
+        http.authorizeHttpRequests().antMatchers("/rest/api/v1/register/**")
                 .permitAll();
         http.authorizeHttpRequests().antMatchers("/actuator/**").permitAll();
         http.authorizeHttpRequests().antMatchers("/access/**").permitAll();
-        http.addFilterBefore(getAuthenticationFilter(),AuthenticationCustomFilter.class)
-                        .authorizeHttpRequests()
-                                .antMatchers("/access/attach").authenticated();
-       http.headers().frameOptions().disable();
+        http.addFilterBefore(getAuthenticationFilter(), AuthenticationCustomFilter.class)
+                .authorizeHttpRequests()
+                .antMatchers("/access/attach").authenticated();
+        http.headers()
+                .frameOptions()
+                .disable();
     }
 
     private AuthenticationCustomFilter getAuthenticationFilter() throws Exception {
-        AuthenticationCustomFilter filter = new AuthenticationCustomFilter(bikeLogInService, env, authenticationManager());
-        return filter;
+        return new AuthenticationCustomFilter(bikeLogInService, env, authenticationManager());
     }
 
     @Bean

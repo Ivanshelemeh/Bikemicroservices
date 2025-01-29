@@ -1,4 +1,4 @@
-package com.example.bikecustomservise.api.model;
+package com.example.bikecustomservise.api.model.customer;
 
 import com.example.bikecustomservise.api.validation.CustomNameValid;
 import org.springframework.lang.NonNull;

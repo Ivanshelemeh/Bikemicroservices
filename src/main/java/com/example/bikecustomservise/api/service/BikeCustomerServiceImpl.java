@@ -2,10 +2,10 @@ package com.example.bikecustomservise.api.service;
 
 import com.example.bikecustomservise.api.entities.BikeCustomer;
 import com.example.bikecustomservise.api.exception.ServiceProccessingException;
-import com.example.bikecustomservise.api.model.BikeCustomerFind;
-import com.example.bikecustomservise.api.model.BikeCustomerModel;
-import com.example.bikecustomservise.api.model.BikeCustomerUpdateModel;
 import com.example.bikecustomservise.api.model.PageRs;
+import com.example.bikecustomservise.api.model.customer.BikeCustomerFind;
+import com.example.bikecustomservise.api.model.customer.BikeCustomerModel;
+import com.example.bikecustomservise.api.model.customer.BikeCustomerUpdateModel;
 import com.example.bikecustomservise.api.repos.BikeCustomerRepository;
 import com.example.bikecustomservise.api.utilit.BikeCustomerMapper;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +19,8 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.Email;
 import java.util.Objects;
-import java.util.Optional;
 
 import static com.example.bikecustomservise.api.exception.ApplicationErrorEnum.USER_NOT_FOUND;
 
@@ -36,6 +36,7 @@ public class BikeCustomerServiceImpl implements BikeCustomerService {
     @Override
     public PageRs<BikeCustomerModel> findAll(final BikeCustomerFind customerFind) {
         final Page<BikeCustomer> customerPage = bikeCustomerRepository.findAll(
+                customerFind.priceOrder(),
                 PageRequest.of(
                         customerFind.pageRq().getPage(),
                         customerFind.pageRq().getSize()
@@ -65,13 +66,9 @@ public class BikeCustomerServiceImpl implements BikeCustomerService {
     }
 
     @Override
-    @CacheEvict(value = "cacheConf", key = "#id")
-    public void deleteBikeCustomerById(@NonNull final Integer id) {
-        Optional<BikeCustomer> optionalBikeCustomer = bikeCustomerRepository.findBikeCustomerById(id);
-        if (optionalBikeCustomer.isEmpty()) {
-            bikeCustomerRepository.delete(optionalBikeCustomer.get());
-        }
-
+    @CacheEvict(value = "cacheConf", key = "#email")
+    public void deleteCustomer(@NonNull @Email String email) {
+        bikeCustomerRepository.deleteByEmail(email);
 
     }
 

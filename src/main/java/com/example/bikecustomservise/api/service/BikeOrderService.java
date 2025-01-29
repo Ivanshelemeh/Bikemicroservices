@@ -1,20 +1,20 @@
 package com.example.bikecustomservise.api.service;
 
-import com.example.bikecustomservise.api.dto.BikeOrderDTO;
 import com.example.bikecustomservise.api.entities.BikeOrder;
-
-import java.util.List;
+import com.example.bikecustomservise.api.exception.ServiceProccessingException;
+import com.example.bikecustomservise.api.model.PageRs;
+import com.example.bikecustomservise.api.model.order.OrderCreateModel;
+import com.example.bikecustomservise.api.model.order.OrderFindModel;
+import com.example.bikecustomservise.api.model.order.OrderModel;
 
 public interface BikeOrderService {
 
 
-    List<BikeOrderDTO> findAllOrders();
+    PageRs<OrderModel> find(final OrderFindModel findModel);
 
-    BikeOrder findByOrderId(Integer id);
+    OrderModel findByOrderId(final Integer id);
 
-    BikeOrderDTO findOrderByPrice(Double price);
+    void deleteByOrderName(final String name);
 
-    void deleteByOrderName(String name);
-
-    BikeOrder saveOrder(BikeOrder order);
+    BikeOrder saveOrder(final OrderCreateModel createModel) throws ServiceProccessingException;
 }

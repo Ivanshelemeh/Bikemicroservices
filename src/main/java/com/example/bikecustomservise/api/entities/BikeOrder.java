@@ -3,6 +3,7 @@ package com.example.bikecustomservise.api.entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -32,6 +33,7 @@ public class BikeOrder implements Serializable {
     private double priceOrder;
 
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "id")
+    @BatchSize(size = 100)
     private List<BikeCustomer> customers;
 
     @Version

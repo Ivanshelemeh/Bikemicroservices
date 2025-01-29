@@ -23,15 +23,11 @@ public interface BikeCustomerRepository extends JpaRepository<BikeCustomer, Inte
     Page<BikeCustomer> findAll(@NonNull final Double price, Pageable pageable);
 
     @Modifying
-    @Query("delete from BikeCustomer bk where bk.email=:email and bk.email is not null")
+    @Query("delete from BikeCustomer bk where bk.email= :email and bk.email is not null")
     void deleteByEmail(@Param("email") String email);
-
-    @Modifying
-    @Query("delete from BikeCustomer bk where bk.id = :bId")
-    void deleteBikeCustomerById(@Param("bId") Integer id);
-
+    
     @EntityGraph(value = "bikecustomer-graph", attributePaths = {"order"}, type = EntityGraph.EntityGraphType.LOAD)
-    @Query("select bk from BikeCustomer bk where bk.password =: password group by bk.password")
+    @Query("select bk from BikeCustomer bk where bk.password = :password group by bk.password")
     @QueryHints(value = {@QueryHint(name = "org.hibernate.readOnly", value = "true")})
     BikeCustomer findByPassword(@Param("password") String password);
 

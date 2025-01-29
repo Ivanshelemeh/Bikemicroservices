@@ -18,10 +18,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
@@ -33,24 +31,18 @@ import java.util.Objects;
 public class AuthenticationCustomFilter extends UsernamePasswordAuthenticationFilter {
 
 
-    private BikeLogInServiceImpl bikeLogInService;
-    private Environment environment;
+    private final BikeLogInServiceImpl bikeLogInService;
+    private final Environment environment;
 
     @Autowired
-    public AuthenticationCustomFilter( BikeLogInServiceImpl bikeLogInService, Environment environment,
+    public AuthenticationCustomFilter(BikeLogInServiceImpl bikeLogInService,
+                                      Environment environment,
                                       AuthenticationManager manager) {
-        this.bikeLogInService =bikeLogInService;
+        this.bikeLogInService = bikeLogInService;
         this.environment = environment;
         super.setAuthenticationManager(manager);
     }
 
-    /**
-     * This method tries  to handle authenticate
-     * @param request
-     * @param response
-     * @return authenticationManager
-     * @throws AuthenticationException
-     */
     @SneakyThrows
     @Override
     public Authentication attemptAuthentication(
@@ -58,7 +50,8 @@ public class AuthenticationCustomFilter extends UsernamePasswordAuthenticationFi
             throws AuthenticationException {
         BikeCustomerSingInModel singInModel = new ObjectMapper()
                 .readValue(request.getInputStream(), BikeCustomerSingInModel.class);
-        return getAuthenticationManager().authenticate(
+        return getAuthenticationManager()
+                .authenticate(
                 new UsernamePasswordAuthenticationToken(
                         singInModel.getEmail(),
                         singInModel.getPassword(),
@@ -67,22 +60,13 @@ public class AuthenticationCustomFilter extends UsernamePasswordAuthenticationFi
         );
     }
 
-    /**
-     * This method attach jwt token
-     * @param request
-     * @param response
-     * @param chain
-     * @param authentication
-     * @throws IOException
-     * @throws ServletException
-     */
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
-                                            Authentication authentication) throws IOException, ServletException {
-        String userName = ((User) authentication.getPrincipal()).getPassword();
-        BikeCustomerSharedDTO sharedDTO = bikeLogInService.getUserDetailsByPassword(userName);
+                                            Authentication authentication)  {
+        final String userName = ((User) authentication.getPrincipal()).getPassword();
+        final BikeCustomerSharedDTO sharedDTO = bikeLogInService.getUserDetailsByPassword(userName);
 
-        String token = Jwts.builder()
+        final var token = Jwts.builder()
                 .setSubject(String.valueOf(sharedDTO.getId()))
                 .setExpiration(new Date(System.currentTimeMillis() +
                         Long.parseLong(Objects.requireNonNull(environment.getProperty("token.expiration.time")))))

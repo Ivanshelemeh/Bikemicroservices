@@ -1,8 +1,14 @@
 package com.example.bikecustomservise.api.service;
 
 import com.example.bikecustomservise.api.annotation.AsyncRunnerAnnotation;
-import com.example.bikecustomservise.api.dto.BikeOrderDTO;
+import com.example.bikecustomservise.api.entities.BikeCustomer;
 import com.example.bikecustomservise.api.entities.BikeOrder;
+import com.example.bikecustomservise.api.exception.ApplicationErrorEnum;
+import com.example.bikecustomservise.api.exception.ServiceProccessingException;
+import com.example.bikecustomservise.api.model.PageRs;
+import com.example.bikecustomservise.api.model.order.OrderCreateModel;
+import com.example.bikecustomservise.api.model.order.OrderFindModel;
+import com.example.bikecustomservise.api.model.order.OrderModel;
 import com.example.bikecustomservise.api.repos.BikeOrderRepository;
 import com.example.bikecustomservise.api.utilit.BikeOrderMapper;
 import lombok.RequiredArgsConstructor;
@@ -10,13 +16,17 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static com.example.bikecustomservise.api.exception.ApplicationErrorEnum.USER_EMAIL_NOT_FOUND;
 
 @Service
 @Slf4j
@@ -27,46 +37,62 @@ public class BikeOrderServiceImpl implements BikeOrderService {
     private final BikeOrderMapper orderMapper;
 
     @Override
-    @Cacheable(value = "cacheConf", unless = "#result.shares<100")
-    public List<BikeOrderDTO> findAllOrders() {
-        return orderRepository.findAll().stream()
-                .map(orderMapper::mapToOrderDto).toList();
+    @Cacheable(value = "cacheConf", unless = "#result.shares< 100")
+    public PageRs<OrderModel> find(@NotNull final OrderFindModel findModel) {
+        final Page<BikeOrder> orderPages = orderRepository.findOrders(
+                findModel.priceOrder(),
+                PageRequest.of(
+                        findModel.pageRq().getPage(),
+                        findModel.pageRq().getSize()
+                )
+        );
+        return new PageRs<>(orderPages.getContent()
+                .stream()
+                .map(this::mapFromOrderEntity)
+                .toList(),
+                orderPages.getSize(),
+                orderPages.hasNext(),
+                orderPages.getNumber(),
+                Math.toIntExact(orderPages.getTotalElements()));
     }
 
-    @Override
-    public BikeOrder findByOrderId(Integer id) {
-        return orderRepository.findBikeOrderById(id)
-                .orElseGet(BikeOrder::new);
-    }
-
-    @Override
     @SneakyThrows
-    public BikeOrderDTO findOrderByPrice(Double price) {
-        if (price < 0) {
-            throw new NoSuchFieldException("not such price available");
-        }
-        BikeOrder bikeOrder = new BikeOrder();
-        bikeOrder.setPriceOrder(price);
-        orderRepository.save(bikeOrder);
-        return orderMapper.mapToOrderDto(bikeOrder);
+    @Override
+    public OrderModel findByOrderId(@NonNull final Integer id) {
+        final var order = orderRepository.findBikeOrderById(id)
+                .orElseThrow(() -> new ServiceProccessingException(ApplicationErrorEnum.ORDER_NOT_FOUND));
+        return mapFromOrderEntity(order);
     }
 
     @SneakyThrows
     @Override
     @CacheEvict(value = "cacheConf", key = "#name")
-    public void deleteByOrderName(String name) {
-        final var bikeOrder = orderRepository.findAll()
-                .stream()
-                .filter(order1 -> order1.getNameOrder().equals(name))
-                .max(Comparator.comparingDouble(BikeOrder::getPriceOrder))
-                .orElseThrow(() -> new NoSuchFieldException("not such name present"));
-        orderRepository.delete(bikeOrder);
+    public void deleteByOrderName(@NonNull final String name) {
+        orderRepository.deleteBikeOrder(name);
+
     }
 
     @Override
     @AsyncRunnerAnnotation
-    public BikeOrder saveOrder(@NotNull @Validated BikeOrder order) {
-        return Optional.ofNullable(orderRepository.save(order))
-                .orElseThrow(() -> new IllegalArgumentException("not such valid order exists"));
+    public BikeOrder saveOrder(@NonNull @Validated final OrderCreateModel model) throws ServiceProccessingException {
+        final var bikeOrder = orderRepository.save(orderMapper.mapFromModel(model));
+        final Set<String> emails = bikeOrder.getCustomers()
+                .stream()
+                .map(BikeCustomer::getEmail)
+                .collect(Collectors.toSet());
+        if (!emails.contains(model.customerEmail())) {
+            throw new ServiceProccessingException(USER_EMAIL_NOT_FOUND);
+        }
+        return bikeOrder;
+
+    }
+
+
+    private OrderModel mapFromOrderEntity(@NonNull final BikeOrder bikeOrder) {
+        return new OrderModel(
+                bikeOrder.getNameOrder(),
+                bikeOrder.getPriceOrder()
+        );
+
     }
 }

@@ -5,19 +5,18 @@ import com.example.bikecustomservise.api.entities.BikeOrder;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-public class BikeOredDTOTest {
+import static org.junit.Assert.assertEquals;
+ class BikeOredDTOTest {
 
     private ModelMapper modelMapper = new ModelMapper();
 
     @Test
-    public void when_Convert_toDTO() {
+    void when_Convert_toDTO() {
         BikeOrder order = new BikeOrder();
         order.setNameOrder("transition");
         order.setPriceOrder(10.99);
 
         BikeOrderDTO dto = modelMapper.map(order, BikeOrderDTO.class);
-        assertEquals(order.getNameOrder(), dto.getNameOrder());
+        assertEquals(order.getNameOrder(), dto.orderName());
     }
 }

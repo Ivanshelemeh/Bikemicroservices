@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/register")
+@RequestMapping("/rest/api/v1/register")
 public class BikeCustomerLoginController {
 
     private final BikeLogInServiceImpl logInService;

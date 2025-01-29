@@ -1,8 +1,8 @@
 package com.example.bikecustomservise.api.service;
 
-import com.example.bikecustomservise.api.model.BikeCustomerFind;
-import com.example.bikecustomservise.api.model.BikeCustomerModel;
-import com.example.bikecustomservise.api.model.BikeCustomerUpdateModel;
+import com.example.bikecustomservise.api.model.customer.BikeCustomerFind;
+import com.example.bikecustomservise.api.model.customer.BikeCustomerModel;
+import com.example.bikecustomservise.api.model.customer.BikeCustomerUpdateModel;
 import com.example.bikecustomservise.api.model.PageRs;
 
 public interface BikeCustomerService {
@@ -11,7 +11,7 @@ public interface BikeCustomerService {
 
     BikeCustomerModel findCustomer(Integer id);
 
-    void deleteBikeCustomerById(Integer id);
+    void deleteCustomer(final String customerEmail);
 
     void save(BikeCustomerModel customer);
 
