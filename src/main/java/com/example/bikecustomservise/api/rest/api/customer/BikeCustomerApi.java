@@ -1,4 +1,4 @@
-package com.example.bikecustomservise.api.rest.api;
+package com.example.bikecustomservise.api.rest.api.customer;
 
 import com.example.bikecustomservise.api.dto.BikeCustomerDTO;
 import com.example.bikecustomservise.api.dto.BikeCustomerUpdateDto;

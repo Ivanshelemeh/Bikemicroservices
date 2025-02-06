@@ -1,9 +1,9 @@
-package com.example.bikecustomservise.api.rest;
+package com.example.bikecustomservise.api.rest.api.login;
 
 import com.example.bikecustomservise.api.dto.BikeCustomerRequestModel;
 import com.example.bikecustomservise.api.dto.BikeCustomerResponseModel;
 import com.example.bikecustomservise.api.dto.BikeCustomerSharedDTO;
-import com.example.bikecustomservise.api.service.BikeLogInServiceImpl;
+import com.example.bikecustomservise.api.service.login.BikeLogInServiceImpl;
 import com.example.bikecustomservise.api.utilit.BikeCustomerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;

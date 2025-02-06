@@ -3,6 +3,8 @@ package com.example.bikecustomservise.api.service;
 import com.example.bikecustomservise.api.dto.CustomerAvroDto;
 import com.example.bikecustomservise.api.model.customer.BikeCustomerModel;
 import com.example.bikecustomservise.api.model.order.OrderModel;
+import com.example.bikecustomservise.api.service.customer.BikeCustomerServiceImpl;
+import com.example.bikecustomservise.api.service.order.BikeOrderServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.avro.file.DataFileWriter;

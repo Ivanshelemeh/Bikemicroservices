@@ -1,4 +1,4 @@
-package com.example.bikecustomservise.api.dto;
+package com.example.bikecustomservise.api.dto.order;
 
 import org.springframework.lang.NonNull;
 

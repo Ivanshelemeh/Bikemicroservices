@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 public enum ApplicationErrorEnum {
     DEFAULT_EXCEPTION(1001, "Problems on the server.Try it another time"),
     USER_NOT_FOUND(2001,"User not found"),
+    PREMIUM_CUSTOMER_NOT_FOUND(2003,"Customers with status premium not found"),
     USER_EMAIL_NOT_FOUND(2005, "Customer email when process creating of order should be specified"),
     ORDER_NOT_FOUND(2000,"Order not found in database"),
     VERIFICATION_FAIL(3002,"User's verification failed"),

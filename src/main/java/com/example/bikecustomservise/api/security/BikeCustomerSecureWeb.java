@@ -1,6 +1,7 @@
 package com.example.bikecustomservise.api.security;
 
-import com.example.bikecustomservise.api.service.BikeLogInServiceImpl;
+import com.example.bikecustomservise.api.security.session.BikeCustomerInvalidSessionStrategy;
+import com.example.bikecustomservise.api.service.login.BikeLogInServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
@@ -45,6 +47,13 @@ public class BikeCustomerSecureWeb extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
+        http.sessionManagement(httpSession ->
+                httpSession
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        .maximumSessions(3)
+                        .maxSessionsPreventsLogin(true)
+                        .and()
+                        .invalidSessionStrategy(new BikeCustomerInvalidSessionStrategy()));
         http.authorizeHttpRequests().antMatchers("/rest/api/v1/customers/**")
                 .permitAll();
         http.authorizeHttpRequests().antMatchers("/rest/api/v1/register/**")

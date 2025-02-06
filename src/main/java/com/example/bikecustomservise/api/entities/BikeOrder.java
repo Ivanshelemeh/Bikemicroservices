@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@NamedEntityGraph(name = "order-graph",attributeNodes = {@NamedAttributeNode(value = "customers")})
+@NamedEntityGraph(name = "order-graph", attributeNodes = {@NamedAttributeNode(value = "customers")})
 public class BikeOrder implements Serializable {
 
     @Id
@@ -32,7 +32,7 @@ public class BikeOrder implements Serializable {
     @Column(name = "price")
     private double priceOrder;
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "id")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "id")
     @BatchSize(size = 100)
     private List<BikeCustomer> customers;
 
@@ -46,4 +46,23 @@ public class BikeOrder implements Serializable {
     @LastModifiedDate
     @Column(name = "lastmod_at")
     private Instant lastModified;
+
+    @Column(name = "premium_order")
+    @Enumerated(value = EnumType.STRING)
+    private PremiumOrder premiumOrder;
+
+    @Column(name = "order_type")
+    @Enumerated(value = EnumType.STRING)
+    private OrderType orderType;
+
+    public enum PremiumOrder {
+        TRUE,
+        FALSE
+    }
+
+    public enum OrderType {
+        BIKE,
+        ENGINE,
+        DETAIL
+    }
 }

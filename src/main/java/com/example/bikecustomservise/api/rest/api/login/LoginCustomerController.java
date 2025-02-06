@@ -1,6 +1,5 @@
-package com.example.bikecustomservise.api.rest;
+package com.example.bikecustomservise.api.rest.api.login;
 
-import com.example.bikecustomservise.api.dto.BikeCustomerSharedDTO;
 import com.example.bikecustomservise.api.dto.BikeCustomerSingInModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.example.bikecustomservise.api.service;
+package com.example.bikecustomservise.api.service.order;
 
 import com.example.bikecustomservise.api.entities.BikeOrder;
 import com.example.bikecustomservise.api.exception.ServiceProccessingException;

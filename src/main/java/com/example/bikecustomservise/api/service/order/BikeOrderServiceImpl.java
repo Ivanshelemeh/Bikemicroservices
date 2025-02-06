@@ -1,6 +1,5 @@
-package com.example.bikecustomservise.api.service;
+package com.example.bikecustomservise.api.service.order;
 
-import com.example.bikecustomservise.api.annotation.AsyncRunnerAnnotation;
 import com.example.bikecustomservise.api.entities.BikeCustomer;
 import com.example.bikecustomservise.api.entities.BikeOrder;
 import com.example.bikecustomservise.api.exception.ApplicationErrorEnum;
@@ -9,7 +8,7 @@ import com.example.bikecustomservise.api.model.PageRs;
 import com.example.bikecustomservise.api.model.order.OrderCreateModel;
 import com.example.bikecustomservise.api.model.order.OrderFindModel;
 import com.example.bikecustomservise.api.model.order.OrderModel;
-import com.example.bikecustomservise.api.repos.BikeOrderRepository;
+import com.example.bikecustomservise.api.repos.order.BikeOrderRepository;
 import com.example.bikecustomservise.api.utilit.BikeOrderMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -20,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
@@ -58,6 +58,7 @@ public class BikeOrderServiceImpl implements BikeOrderService {
 
     @SneakyThrows
     @Override
+    @Transactional(readOnly = true)
     public OrderModel findByOrderId(@NonNull final Integer id) {
         final var order = orderRepository.findBikeOrderById(id)
                 .orElseThrow(() -> new ServiceProccessingException(ApplicationErrorEnum.ORDER_NOT_FOUND));
@@ -73,7 +74,7 @@ public class BikeOrderServiceImpl implements BikeOrderService {
     }
 
     @Override
-    @AsyncRunnerAnnotation
+    @Transactional
     public BikeOrder saveOrder(@NonNull @Validated final OrderCreateModel model) throws ServiceProccessingException {
         final var bikeOrder = orderRepository.save(orderMapper.mapFromModel(model));
         final Set<String> emails = bikeOrder.getCustomers()
@@ -86,7 +87,6 @@ public class BikeOrderServiceImpl implements BikeOrderService {
         return bikeOrder;
 
     }
-
 
     private OrderModel mapFromOrderEntity(@NonNull final BikeOrder bikeOrder) {
         return new OrderModel(

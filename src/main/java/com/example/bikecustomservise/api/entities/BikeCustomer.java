@@ -20,7 +20,7 @@ import java.time.Instant;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@NamedEntityGraph(name = "bikecustomer-graph",attributeNodes = {@NamedAttributeNode(value = "order")})
+@NamedEntityGraph(name = "bikecustomer-graph", attributeNodes = {@NamedAttributeNode(value = "order")})
 public class BikeCustomer implements Serializable {
 
 
@@ -33,7 +33,7 @@ public class BikeCustomer implements Serializable {
     @CustomNameValid
     private String nickName;
 
-    @Column(name = "mail",nullable = false, unique = true)
+    @Column(name = "mail", nullable = false, unique = true)
     @Size(max = 20)
     @Email
     private String email;
@@ -42,8 +42,8 @@ public class BikeCustomer implements Serializable {
     private String password;
 
 
-    @ManyToOne(targetEntity = BikeOrder.class,cascade = CascadeType.ALL)
-    @JoinColumn(name = "id",insertable = false, updatable = false)
+    @ManyToOne(targetEntity = BikeOrder.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id", insertable = false, updatable = false)
     @BatchSize(size = 100)
     private BikeOrder order;
 
@@ -57,4 +57,13 @@ public class BikeCustomer implements Serializable {
     @LastModifiedDate
     @Column(name = "lastmodify_at")
     private Instant lastModified;
+
+    @Column(name = "premium_customer")
+    @Enumerated(value = EnumType.STRING)
+    private PremiumCustomer premiumCustomer;
+
+    public enum PremiumCustomer {
+        TRUE,
+        FALSE
+    }
 }

@@ -1,4 +1,4 @@
-package com.example.bikecustomservise.api.rest;
+package com.example.bikecustomservise.api.rest.api.customer;
 
 import com.example.bikecustomservise.api.dto.BikeCustomerDTO;
 import com.example.bikecustomservise.api.dto.BikeCustomerUpdateDto;
@@ -6,8 +6,7 @@ import com.example.bikecustomservise.api.model.*;
 import com.example.bikecustomservise.api.model.customer.BikeCustomerFind;
 import com.example.bikecustomservise.api.model.customer.BikeCustomerModel;
 import com.example.bikecustomservise.api.model.customer.BikeCustomerUpdateModel;
-import com.example.bikecustomservise.api.rest.api.BikeCustomerApi;
-import com.example.bikecustomservise.api.service.BikeCustomerService;
+import com.example.bikecustomservise.api.service.customer.BikeCustomerService;
 import com.example.bikecustomservise.api.validation.CustomNameValid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

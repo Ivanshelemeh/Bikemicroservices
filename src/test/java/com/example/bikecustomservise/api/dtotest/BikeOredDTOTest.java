@@ -1,6 +1,6 @@
 package com.example.bikecustomservise.api.dtotest;
 
-import com.example.bikecustomservise.api.dto.BikeOrderDTO;
+import com.example.bikecustomservise.api.dto.order.BikeOrderDTO;
 import com.example.bikecustomservise.api.entities.BikeOrder;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;

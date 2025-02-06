@@ -1,7 +1,6 @@
 package com.example.bikecustomservise.api.controllertest;
 
-import com.example.bikecustomservise.api.service.BikeCustomerService;
-import com.example.bikecustomservise.api.service.BikeCustomerServiceImpl;
+import com.example.bikecustomservise.api.service.customer.BikeCustomerServiceImpl;
 import com.example.bikecustomservise.api.utilit.BikeCustomerMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class BikeCustomerControllerTest {
+class BikeCustomerControllerTest {
 
     @Autowired
     MockMvc mockMvc;

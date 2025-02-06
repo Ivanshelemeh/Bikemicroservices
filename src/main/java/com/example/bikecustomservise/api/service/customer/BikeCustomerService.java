@@ -1,4 +1,4 @@
-package com.example.bikecustomservise.api.service;
+package com.example.bikecustomservise.api.service.customer;
 
 import com.example.bikecustomservise.api.model.customer.BikeCustomerFind;
 import com.example.bikecustomservise.api.model.customer.BikeCustomerModel;

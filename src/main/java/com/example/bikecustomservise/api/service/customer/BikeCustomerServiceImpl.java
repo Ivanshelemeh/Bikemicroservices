@@ -1,4 +1,4 @@
-package com.example.bikecustomservise.api.service;
+package com.example.bikecustomservise.api.service.customer;
 
 import com.example.bikecustomservise.api.entities.BikeCustomer;
 import com.example.bikecustomservise.api.exception.ServiceProccessingException;
@@ -6,7 +6,7 @@ import com.example.bikecustomservise.api.model.PageRs;
 import com.example.bikecustomservise.api.model.customer.BikeCustomerFind;
 import com.example.bikecustomservise.api.model.customer.BikeCustomerModel;
 import com.example.bikecustomservise.api.model.customer.BikeCustomerUpdateModel;
-import com.example.bikecustomservise.api.repos.BikeCustomerRepository;
+import com.example.bikecustomservise.api.repos.customer.BikeCustomerRepository;
 import com.example.bikecustomservise.api.utilit.BikeCustomerMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

@@ -1,10 +1,9 @@
-package com.example.bikecustomservise.api.service;
+package com.example.bikecustomservise.api.service.login;
 
 import com.example.bikecustomservise.api.dto.BikeCustomerSharedDTO;
 import com.example.bikecustomservise.api.entities.BikeCustomer;
-import com.example.bikecustomservise.api.exception.ApplicationErrorEnum;
 import com.example.bikecustomservise.api.exception.ServiceProccessingException;
-import com.example.bikecustomservise.api.repos.BikeCustomerRepository;
+import com.example.bikecustomservise.api.repos.customer.BikeCustomerRepository;
 import com.example.bikecustomservise.api.utilit.BikeCustomerMapper;
 import lombok.SneakyThrows;
 import org.springframework.security.core.userdetails.User;

@@ -14,7 +14,7 @@
     <name>BikeCustomServise</name>
     <description>BikeCustomServise</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <spring-boot-starter-validation>2.6.1</spring-boot-starter-validation>
         <org.modelmapper>2.3.5</org.modelmapper>
         <spring-boot-starter-security>2.3.3.RELEASE</spring-boot-starter-security>

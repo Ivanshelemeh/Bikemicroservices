@@ -1,4 +1,4 @@
-package com.example.bikecustomservise.api.repos;
+package com.example.bikecustomservise.api.repos.customer;
 
 import com.example.bikecustomservise.api.entities.BikeCustomer;
 import org.springframework.data.domain.Page;
@@ -18,8 +18,8 @@ public interface BikeCustomerRepository extends JpaRepository<BikeCustomer, Inte
     @EntityGraph(value = "bikecustomer-graph", attributePaths = {"order"}, type = EntityGraph.EntityGraphType.LOAD)
     Optional<BikeCustomer> findBikeCustomerById(Integer id);
 
-    @Query("select bk from BikeCustomer bk  left join  " +
-            " BikeOrder bo on  bo.id = bk.id where bo.priceOrder = :price and bo.priceOrder is not null ")
+    @Query("select bk from BikeCustomer bk  join fetch  " +
+            " BikeOrder bo on  bo.id = bk.id where bo.priceOrder = :price and bo.priceOrder = :price")
     Page<BikeCustomer> findAll(@NonNull final Double price, Pageable pageable);
 
     @Modifying

@@ -1,7 +1,7 @@
 package com.example.bikecustomservise.api.daotest;
 
 import com.example.bikecustomservise.api.entities.BikeCustomer;
-import com.example.bikecustomservise.api.repos.BikeCustomerRepository;
+import com.example.bikecustomservise.api.repos.customer.BikeCustomerRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,8 +13,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.sql.DataSource;
 
 @DataJpaTest
 @ActiveProfiles("test")

@@ -1,7 +1,7 @@
 package com.example.bikecustomservise.api.daotest;
 
 import com.example.bikecustomservise.api.entities.BikeOrder;
-import com.example.bikecustomservise.api.repos.BikeOrderRepository;
+import com.example.bikecustomservise.api.repos.order.BikeOrderRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +31,10 @@ public class BikeOrderRepoTest {
         bikeOrder.setNameOrder("TrailBike");
         bikeOrder.setPriceOrder(22.44);
         bikeOrder.setId(12);
+
         BikeOrder saveOrder = bikeOrderRepository.save(bikeOrder);
 
-        assertThat(saveOrder.getPriceOrder()).isNotNull();
+        assertThat(saveOrder).isNotNull();
 
     }
 }
