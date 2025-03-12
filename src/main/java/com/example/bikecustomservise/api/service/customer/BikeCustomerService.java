@@ -13,7 +13,7 @@ public interface BikeCustomerService {
 
     void deleteCustomer(final String customerEmail);
 
-    void save(BikeCustomerModel customer);
+    BikeCustomerModel create(BikeCustomerModel customer);
 
     BikeCustomerModel update(final String name, final BikeCustomerUpdateModel updateModel);
 

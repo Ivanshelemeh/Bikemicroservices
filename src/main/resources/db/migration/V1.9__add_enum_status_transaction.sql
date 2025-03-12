@@ -1,0 +1,1 @@
+ALTER TABLE cus_transaction ADD COLUMN transaction_status ENUM('fail', 'pass');

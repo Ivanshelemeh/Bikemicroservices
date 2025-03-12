@@ -26,7 +26,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.example.bikecustomservise.api.exception.ApplicationErrorEnum.USER_EMAIL_NOT_FOUND;
+import static com.example.bikecustomservise.api.exception.ApplicationErrorEnum.*;
 
 @Service
 @Slf4j
@@ -37,7 +37,7 @@ public class BikeOrderServiceImpl implements BikeOrderService {
     private final BikeOrderMapper orderMapper;
 
     @Override
-    @Cacheable(value = "cacheConf", unless = "#result.shares< 100")
+    @Cacheable(value = "cacheConf", unless = "#result == null || #result.isEmpty()")
     public PageRs<OrderModel> find(@NotNull final OrderFindModel findModel) {
         final Page<BikeOrder> orderPages = orderRepository.findOrders(
                 findModel.priceOrder(),
@@ -69,13 +69,20 @@ public class BikeOrderServiceImpl implements BikeOrderService {
     @Override
     @CacheEvict(value = "cacheConf", key = "#name")
     public void deleteByOrderName(@NonNull final String name) {
+        log.debug("Deleting order with name{}",name);
         orderRepository.deleteBikeOrder(name);
+        log.info("Deleted order success with");
 
     }
 
     @Override
     @Transactional
-    public BikeOrder saveOrder(@NonNull @Validated final OrderCreateModel model) throws ServiceProccessingException {
+    public BikeOrder saveOrder(@NonNull @Validated final OrderCreateModel model)
+            throws ServiceProccessingException {
+        log.debug("Saving order with name{}", model.orderName());
+        if (orderRepository.existsBikeOrderByNameOrder(model.orderName())){
+            throw new ServiceProccessingException(ORDER_ALREADY_EXISTS);
+        }
         final var bikeOrder = orderRepository.save(orderMapper.mapFromModel(model));
         final Set<String> emails = bikeOrder.getCustomers()
                 .stream()
@@ -84,6 +91,7 @@ public class BikeOrderServiceImpl implements BikeOrderService {
         if (!emails.contains(model.customerEmail())) {
             throw new ServiceProccessingException(USER_EMAIL_NOT_FOUND);
         }
+        log.info("Create order with customer email{}",model.customerEmail());
         return bikeOrder;
 
     }

@@ -58,14 +58,14 @@ public class BikeCustomerController implements BikeCustomerApi {
             return ResponseEntity.noContent().build();
         }
         final var bikeModel = mapFromDto(dto);
-        service.save(bikeModel);
-        return ResponseEntity.ok(new UpdateResponse(bikeModel.customerEmail()));
+        final var customerModel = service.create(bikeModel);
+        return ResponseEntity.ok(new UpdateResponse(customerModel.customerEmail()));
 
     }
 
     @Override
     public ResponseEntity<UpdateResponse> update(@PathVariable("nickName") @CustomNameValid String nickName,
-                                                         @RequestBody @Validated BikeCustomerUpdateDto customer) {
+                                                 @RequestBody @Validated BikeCustomerUpdateDto customer) {
         if (nickName.isEmpty()) {
             ResponseEntity.noContent().build();
         }

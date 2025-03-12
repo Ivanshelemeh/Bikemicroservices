@@ -8,10 +8,10 @@ import com.example.bikecustomservise.api.model.customer.BikeCustomerModel;
 import com.example.bikecustomservise.api.model.customer.BikeCustomerUpdateModel;
 import com.example.bikecustomservise.api.repos.customer.BikeCustomerRepository;
 import com.example.bikecustomservise.api.utilit.BikeCustomerMapper;
+import com.example.bikecustomservise.api.validation.CustomNameValid;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.Email;
-import java.util.Objects;
 
 import static com.example.bikecustomservise.api.exception.ApplicationErrorEnum.USER_NOT_FOUND;
 
@@ -68,27 +67,32 @@ public class BikeCustomerServiceImpl implements BikeCustomerService {
     @Override
     @CacheEvict(value = "cacheConf", key = "#email")
     public void deleteCustomer(@NonNull @Email String email) {
+        log.debug("Deleting customer by email{}", email);
         bikeCustomerRepository.deleteByEmail(email);
+        log.info("Success deleting customer by email{}", email);
 
     }
 
     @Override
     @SneakyThrows
     @Transactional
-    public void save(@NonNull final BikeCustomerModel customer) {
-        bikeCustomerRepository.save(customerMapper.mapFromModel(customer));
+    public BikeCustomerModel create(@NonNull final BikeCustomerModel customer) {
+        log.debug("saving customer in db{}", customer.customerEmail());
+        final var saved = bikeCustomerRepository.save(customerMapper.mapFromModel(customer));
+        return mapFromEntity(saved);
     }
 
     @SneakyThrows
     @Override
-    public BikeCustomerModel update(final String name,
+    public BikeCustomerModel update(@NonNull @CustomNameValid final String name,
                                     final BikeCustomerUpdateModel updateModel) {
-        if (StringUtils.isEmpty(name) || Objects.isNull(updateModel)) {
-            throw new ServiceProccessingException(USER_NOT_FOUND);
-        }
-        final var bikeCustomer = bikeCustomerRepository
-                .save(customerMapper.mapFromUpdateModel(updateModel));
-        return mapFromEntity(bikeCustomer);
+        log.debug("updating customer by his name{}", name);
+        final var existingCustomer = bikeCustomerRepository.findBikeCustomerByNickName(name)
+                .orElseThrow(() -> new ServiceProccessingException(USER_NOT_FOUND));
+        final var updateCustomer = customerMapper.mapFromUpdateModel(updateModel);
+        updateCustomer.setId(existingCustomer.getId());
+        final var savedCustomer = bikeCustomerRepository.save(updateCustomer);
+        return mapFromEntity(savedCustomer);
 
     }
 

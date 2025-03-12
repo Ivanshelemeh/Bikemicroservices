@@ -21,4 +21,6 @@ public interface BikeOrderRepository extends JpaRepository<BikeOrder, Integer> {
     @Modifying
     @Query("DELETE FROM BikeOrder bo WHERE bo.nameOrder = :orderName")
     void deleteBikeOrder(@NonNull final String orderName);
+
+    boolean existsBikeOrderByNameOrder(@NonNull String orderName);
 }

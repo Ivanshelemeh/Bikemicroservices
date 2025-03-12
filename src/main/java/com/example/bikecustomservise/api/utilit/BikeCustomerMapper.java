@@ -56,6 +56,10 @@ public class BikeCustomerMapper {
         return customer1;
     }
 
+    public BikeCustomerModel mapFromCustomerEntity(final BikeCustomer customer) {
+        return MODEL_MAPPER.map(customer, BikeCustomerModel.class);
+    }
+
     public BikeCustomerSharedDTO mapToDToShared(BikeCustomer bikeCustomer) {
         return MODEL_MAPPER.map(bikeCustomer, BikeCustomerSharedDTO.class);
     }

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 import java.util.Set;
@@ -21,7 +22,9 @@ public class BikeOrderPremiumServiceImpl implements BikeOrderPremiumService {
     private final OrderPremium orderPremium;
 
     @Override
+    @Transactional(readOnly = true)
     public Set<OrderModel> findPremiumOrder(@NotNull final OrderFindModel findModel) {
+        log.debug("finding premium order");
         return orderPremium.findPremiumOrder(findModel.priceOrder(), findModel.pageRq().size(), findModel.pageRq().getPage())
                 .stream()
                 .map(this::mapFromOrderEntity)

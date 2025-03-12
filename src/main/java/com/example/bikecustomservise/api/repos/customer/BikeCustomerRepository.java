@@ -18,6 +18,9 @@ public interface BikeCustomerRepository extends JpaRepository<BikeCustomer, Inte
     @EntityGraph(value = "bikecustomer-graph", attributePaths = {"order"}, type = EntityGraph.EntityGraphType.LOAD)
     Optional<BikeCustomer> findBikeCustomerById(Integer id);
 
+    @EntityGraph(value = "bikecustomer-graph", attributePaths = {"order"}, type = EntityGraph.EntityGraphType.LOAD)
+    Optional<BikeCustomer> findBikeCustomerByNickName(String name);
+
     @Query("select bk from BikeCustomer bk  join fetch  " +
             " BikeOrder bo on  bo.id = bk.id where bo.priceOrder = :price and bo.priceOrder = :price")
     Page<BikeCustomer> findAll(@NonNull final Double price, Pageable pageable);

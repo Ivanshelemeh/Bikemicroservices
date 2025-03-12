@@ -6,6 +6,7 @@ import com.example.bikecustomservise.api.model.order.OrderWithTypeModel;
 import com.example.bikecustomservise.api.repos.order.BikeOrderWithOrderType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -16,7 +17,9 @@ public class BikeOrderWithTypeServiceImpl implements BikeOrderWithTypeService {
 
     private final BikeOrderWithOrderType orderWithOrderType;
 
+
     @Override
+    @Transactional(readOnly = true)
     public List<OrderWithTypeModel> findTypedOrder(@NotNull final OrderTypedFindModel findModel) {
         return orderWithOrderType.findBikeOrdersWithCurrentType(
                         findModel.priceOrderType(),

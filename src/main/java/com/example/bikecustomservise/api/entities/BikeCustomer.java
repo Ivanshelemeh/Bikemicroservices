@@ -14,6 +14,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Set;
 
 @Entity
 @Table(name = "bike_customer")
@@ -46,6 +47,13 @@ public class BikeCustomer implements Serializable {
     @JoinColumn(name = "id", insertable = false, updatable = false)
     @BatchSize(size = 100)
     private BikeOrder order;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = {
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REMOVE
+    }, mappedBy = "customer_id")
+    private Set<CustomerTransaction> transactions;
 
     @Version
     private int versionId;
