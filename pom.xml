@@ -8,12 +8,13 @@
         <version>2.6.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
-    <artifactId>BikeCustomServise</artifactId>
+    <groupId>com.example.bikecustomservise</groupId>
+    <artifactId>bike-custom-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>BikeCustomServise</name>
     <description>BikeCustomServise</description>
     <properties>
+        <start-class>com.example.bikecustomservise.api.BikeCustomerServiceApplication</start-class>
         <java.version>17</java.version>
         <spring-boot-starter-validation>2.6.1</spring-boot-starter-validation>
         <org.modelmapper>2.3.5</org.modelmapper>
@@ -110,10 +111,6 @@
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>0.9.1</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

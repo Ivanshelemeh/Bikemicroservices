@@ -12,7 +12,7 @@ import java.util.List;
 @RequestMapping("/rest/api/v1/customers/premium")
 public interface BikeCustomerPremiumApi {
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<List<BikeCustomerDTO>> getPremiumCustomers(@RequestParam(defaultValue = "0") int pageNumber,
-                                                              @RequestParam(defaultValue = "0") int sizeNumber);
+    @GetMapping(value = "/orders", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<List<BikeCustomerDTO>> getPremiumCustomers(@RequestParam int pageNumber,
+                                                              @RequestParam int sizeNumber);
 }

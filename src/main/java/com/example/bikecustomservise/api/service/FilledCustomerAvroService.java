@@ -3,8 +3,8 @@ package com.example.bikecustomservise.api.service;
 import com.example.bikecustomservise.api.dto.CustomerAvroDto;
 import com.example.bikecustomservise.api.model.customer.BikeCustomerModel;
 import com.example.bikecustomservise.api.model.order.OrderModel;
-import com.example.bikecustomservise.api.service.customer.BikeCustomerServiceImpl;
-import com.example.bikecustomservise.api.service.order.BikeOrderServiceImpl;
+import com.example.bikecustomservise.api.service.customer.BikeCustomerService;
+import com.example.bikecustomservise.api.service.order.BikeOrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.avro.file.DataFileWriter;
@@ -23,8 +23,8 @@ import java.time.OffsetDateTime;
 @RequiredArgsConstructor
 public class FilledCustomerAvroService {
 
-    private final BikeCustomerServiceImpl bikeCustomerService;
-    private final BikeOrderServiceImpl orderService;
+    private final BikeCustomerService bikeCustomerService;
+    private final BikeOrderService orderService;
 
     @SneakyThrows
     public void serializeCustomerAvro( Integer customerId, Integer orderId) {

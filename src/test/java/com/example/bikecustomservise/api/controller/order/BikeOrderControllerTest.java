@@ -1,7 +1,7 @@
-package com.example.bikecustomservise.api.controllertest;
+package com.example.bikecustomservise.api.controller.order;
 
 import com.example.bikecustomservise.api.entities.BikeOrder;
-import com.example.bikecustomservise.api.service.order.BikeOrderServiceImpl;
+import com.example.bikecustomservise.api.service.order.BikeOrderService;
 import com.example.bikecustomservise.api.utilit.BikeOrderMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -26,7 +25,7 @@ class BikeOrderControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    private BikeOrderServiceImpl orderService;
+    private BikeOrderService orderService;
 
     @SneakyThrows
     @Test

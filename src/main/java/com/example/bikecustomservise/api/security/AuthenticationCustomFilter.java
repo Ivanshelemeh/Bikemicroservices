@@ -2,12 +2,13 @@ package com.example.bikecustomservise.api.security;
 
 import com.example.bikecustomservise.api.dto.BikeCustomerSharedDTO;
 import com.example.bikecustomservise.api.dto.BikeCustomerSingInModel;
-import com.example.bikecustomservise.api.service.login.BikeLogInServiceImpl;
+import com.example.bikecustomservise.api.service.login.BikeLoginService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,11 +32,11 @@ import java.util.Objects;
 public class AuthenticationCustomFilter extends UsernamePasswordAuthenticationFilter {
 
 
-    private final BikeLogInServiceImpl bikeLogInService;
+    private final BikeLoginService bikeLogInService;
     private final Environment environment;
 
     @Autowired
-    public AuthenticationCustomFilter(BikeLogInServiceImpl bikeLogInService,
+    public AuthenticationCustomFilter(@Qualifier("bikeLoginServiceImpl") BikeLoginService bikeLogInService,
                                       Environment environment,
                                       AuthenticationManager manager) {
         this.bikeLogInService = bikeLogInService;
@@ -52,17 +53,17 @@ public class AuthenticationCustomFilter extends UsernamePasswordAuthenticationFi
                 .readValue(request.getInputStream(), BikeCustomerSingInModel.class);
         return getAuthenticationManager()
                 .authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        singInModel.getEmail(),
-                        singInModel.getPassword(),
-                        new ArrayList<>()
-                )
-        );
+                        new UsernamePasswordAuthenticationToken(
+                                singInModel.getEmail(),
+                                singInModel.getPassword(),
+                                new ArrayList<>()
+                        )
+                );
     }
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
-                                            Authentication authentication)  {
+                                            Authentication authentication) {
         final String userName = ((User) authentication.getPrincipal()).getPassword();
         final BikeCustomerSharedDTO sharedDTO = bikeLogInService.getUserDetailsByPassword(userName);
 

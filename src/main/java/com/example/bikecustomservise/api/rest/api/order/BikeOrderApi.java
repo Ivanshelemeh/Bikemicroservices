@@ -17,24 +17,22 @@ import java.util.List;
 public interface BikeOrderApi {
 
     @GetMapping
-    ResponseEntity<PageDtoRs<OrderModel>> find(@RequestParam double priceOrder,
+    ResponseEntity<PageDtoRs<OrderModel>> find(@RequestParam(value = "costs")List<Double> costs,
                                                @RequestParam int size,
                                                @RequestParam int page);
 
-    @GetMapping(value = "{/id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<BikeOrderDTO> getOrder(@PathVariable Integer id);
 
     @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<UpdateResponse> createOrder(@RequestBody @Valid BikeOrderCreateDTO createDTO);
 
-    @DeleteMapping(value = "{/name}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{name}", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> deleteOrder(@PathVariable String name);
 
-    ResponseEntity<List<BikeOrderWithTypeDTO>> getOrdersWithType(@RequestParam() String type,
-                                                                 @RequestParam double priceOrder,
-                                                                 @RequestParam(defaultValue = "0") int sizeOrder,
-                                                                 @RequestParam(defaultValue = "0") int pageOrder);
+    ResponseEntity<BikeOrderWithTypeDTO> getOrdersWithType(@RequestParam String type,
+                                                                 @RequestParam double priceOrder);
 
 
 }

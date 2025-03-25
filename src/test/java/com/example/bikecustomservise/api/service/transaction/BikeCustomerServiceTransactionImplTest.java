@@ -2,9 +2,10 @@ package com.example.bikecustomservise.api.service.transaction;
 
 import com.example.bikecustomservise.api.entities.BikeCustomer;
 import com.example.bikecustomservise.api.entities.CustomerTransaction;
+import com.example.bikecustomservise.api.entities.TransactionDetails;
 import com.example.bikecustomservise.api.model.customer.BikeCustomerModel;
 import com.example.bikecustomservise.api.model.transaction.TransactionFindModel;
-import com.example.bikecustomservise.api.repos.transaction.BikeCustomerTransaction;
+import com.example.bikecustomservise.api.repos.transaction.CustomerTransactionRepository;
 import com.example.bikecustomservise.api.utilit.BikeCustomerMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +20,6 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,22 +27,19 @@ import java.util.List;
 class BikeCustomerServiceTransactionImplTest {
 
     private static final LocalDateTime NOW = LocalDateTime.now();
-    private static final LocalDateTime END_TIME = LocalDateTime.now().plusMinutes(30);
 
     private static final TransactionFindModel FIND_MODEL = new TransactionFindModel(
-            12,
-            NOW,
-            END_TIME
+            12
     );
-    private static final TransactionFindModel ILLEGAL_MODEL = new TransactionFindModel(
-            10,
-            null,
-            null
-    );
+
     private static final CustomerTransaction CUSTOMER_TRANSACTION = new CustomerTransaction(
             22L,
             NOW,
             new BikeCustomer(),
+            new TransactionDetails(
+                    "JoshLong",
+                    "Basic transaction"
+            ),
             CustomerTransaction.TransactionStatus.PASS
 
     );
@@ -57,7 +54,7 @@ class BikeCustomerServiceTransactionImplTest {
     private BikeCustomerMapper mapper;
 
     @Mock
-    private BikeCustomerTransaction transaction;
+    private CustomerTransactionRepository repository;
 
     @InjectMocks
     private BikeCustomerServiceTransactionImpl serviceTransactionImpl;
@@ -66,8 +63,7 @@ class BikeCustomerServiceTransactionImplTest {
     void updateUp() {
         serviceTransactionImpl = null;
         MockitoAnnotations.openMocks(this);
-        Mockito.when(transaction.findTransactions(Mockito.anyInt(),
-                        Mockito.any(LocalDateTime.class), Mockito.any(LocalDateTime.class)))
+        Mockito.when(repository.findAllCustomerTransaction(Mockito.anyInt()))
                 .thenReturn(List.of(CUSTOMER_TRANSACTION));
         Mockito.when(mapper.mapFromCustomerEntity(Mockito.any()))
                 .thenReturn(CUSTOMER_MODEL);
@@ -84,16 +80,5 @@ class BikeCustomerServiceTransactionImplTest {
 
         );
     }
-
-    @Test
-    void get_customer_when_periods_transaction_not_set_fails() {
-        Mockito.when(transaction.findTransactions(Mockito.anyInt(),
-                        Mockito.any(LocalDateTime.class), Mockito.any(LocalDateTime.class)))
-                .thenReturn(Collections.emptyList());
-        org.assertj.core.api.Assertions.assertThatThrownBy(() -> serviceTransactionImpl.getCustomerTransactionsFrom(ILLEGAL_MODEL))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("customer's transactions should be set");
-    }
-
 
 }

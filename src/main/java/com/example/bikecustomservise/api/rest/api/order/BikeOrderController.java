@@ -25,9 +25,9 @@ public class BikeOrderController implements BikeOrderApi {
     private final BikeOrderWithTypeService typeService;
 
     @Override
-    public ResponseEntity<PageDtoRs<OrderModel>> find(double priceOrder, int size, int page) {
+    public ResponseEntity<PageDtoRs<OrderModel>> find(List<Double> costs, int size, int page) {
         final var orderPage = bikeOrderService.find(
-                new OrderFindModel(priceOrder,
+                new OrderFindPricesModel(costs,
                         new PageRq(size, page))
         );
         return ResponseEntity.ok(new PageDtoRs<>(
@@ -40,21 +40,12 @@ public class BikeOrderController implements BikeOrderApi {
     }
 
     @Override
-    public ResponseEntity<List<BikeOrderWithTypeDTO>> getOrdersWithType(String type, double priceOrder, int sizeOrder, int pageOrder) {
-        final var orderTypeList = typeService.findTypedOrder(
-                        new OrderTypedFindModel(
-                                type,
-                                null,
-                                priceOrder,
-                                new PageRq(
-                                        sizeOrder,
-                                        pageOrder
-                                )
-                        )
-                ).stream()
-                .map(this::mapFromOrderTypeModel)
-                .toList();
-        return ResponseEntity.ok(orderTypeList);
+    public ResponseEntity<BikeOrderWithTypeDTO> getOrdersWithType(String type, double priceOrder) {
+        final var orderType = typeService.findTypedOrder(new OrderTypedFindModel(
+                type,
+                priceOrder
+        ));
+        return ResponseEntity.ok(mapFromOrderTypeModel(orderType));
     }
 
     @Override
@@ -67,7 +58,7 @@ public class BikeOrderController implements BikeOrderApi {
     @Override
     public ResponseEntity<UpdateResponse> createOrder(@NonNull final BikeOrderCreateDTO createDTO) {
         final var order = bikeOrderService.saveOrder(mapFromDTO(createDTO));
-        return ResponseEntity.ok(new UpdateResponse(order.getNameOrder()));
+        return ResponseEntity.ok(new UpdateResponse(order.orderName()));
     }
 
     @Override

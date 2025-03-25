@@ -3,7 +3,7 @@ package com.example.bikecustomservise.api.service.login;
 import com.example.bikecustomservise.api.dto.BikeCustomerSharedDTO;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-public interface BikeLogInService extends UserDetailsService {
+public interface BikeLoginService extends UserDetailsService {
 
     /**
      * Created shared dto

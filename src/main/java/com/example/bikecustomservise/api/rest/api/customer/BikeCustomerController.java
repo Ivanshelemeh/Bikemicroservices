@@ -2,7 +2,9 @@ package com.example.bikecustomservise.api.rest.api.customer;
 
 import com.example.bikecustomservise.api.dto.BikeCustomerDTO;
 import com.example.bikecustomservise.api.dto.BikeCustomerUpdateDto;
-import com.example.bikecustomservise.api.model.*;
+import com.example.bikecustomservise.api.model.PageDtoRs;
+import com.example.bikecustomservise.api.model.PageRq;
+import com.example.bikecustomservise.api.model.UpdateResponse;
 import com.example.bikecustomservise.api.model.customer.BikeCustomerFind;
 import com.example.bikecustomservise.api.model.customer.BikeCustomerModel;
 import com.example.bikecustomservise.api.model.customer.BikeCustomerUpdateModel;

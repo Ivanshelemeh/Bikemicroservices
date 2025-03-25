@@ -2,7 +2,7 @@ package com.example.bikecustomservise.api.rest.api.order;
 
 import com.example.bikecustomservise.api.dto.order.BikeOrderDTO;
 import com.example.bikecustomservise.api.model.PageRq;
-import com.example.bikecustomservise.api.model.order.OrderFindModel;
+import com.example.bikecustomservise.api.model.order.OrderFindNamesModel;
 import com.example.bikecustomservise.api.model.order.OrderModel;
 import com.example.bikecustomservise.api.service.order.BikeOrderPremiumService;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +18,13 @@ public class BikeOrderPremiumController implements BikeOrderPremiumApi {
     private final BikeOrderPremiumService orderPremiumService;
 
     @Override
-    public ResponseEntity<List<BikeOrderDTO>> getPremiumOrders(int pageOrder, int sizeOrder, double priceOrder) {
-        return ResponseEntity.ok(orderPremiumService.findPremiumOrder(
-                        new OrderFindModel(priceOrder,
-                                new PageRq(sizeOrder, pageOrder))
-                ).stream()
+    public ResponseEntity<List<BikeOrderDTO>> getPremiumOrders(int pageOrder, int sizeOrder) {
+        return ResponseEntity.ok(orderPremiumService.findPremiumOrder(new OrderFindNamesModel(
+                new PageRq(
+                        sizeOrder,
+                        pageOrder
+                )))
+                .stream()
                 .map(this::mapFromModel)
                 .toList());
     }

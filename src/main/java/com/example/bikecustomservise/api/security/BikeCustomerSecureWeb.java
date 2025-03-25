@@ -1,7 +1,7 @@
 package com.example.bikecustomservise.api.security;
 
 import com.example.bikecustomservise.api.security.session.BikeCustomerInvalidSessionStrategy;
-import com.example.bikecustomservise.api.service.login.BikeLogInServiceImpl;
+import com.example.bikecustomservise.api.service.login.BikeLoginServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,13 +25,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class BikeCustomerSecureWeb extends WebSecurityConfigurerAdapter {
 
 
-    private final BikeLogInServiceImpl bikeLogInService;
+    private final BikeLoginServiceImpl bikeLogInService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final Environment env;
 
 
     @Autowired
-    public BikeCustomerSecureWeb(BikeLogInServiceImpl bikeLogInService,
+    public BikeCustomerSecureWeb(BikeLoginServiceImpl bikeLogInService,
                                  BCryptPasswordEncoder passwordEncoder,
                                  Environment env) {
         this.bikeLogInService = bikeLogInService;

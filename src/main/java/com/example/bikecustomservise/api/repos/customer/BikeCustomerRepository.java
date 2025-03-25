@@ -13,6 +13,7 @@ import java.util.Optional;
 /**
  * author shele
  */
+
 public interface BikeCustomerRepository extends JpaRepository<BikeCustomer, Integer> {
 
     @EntityGraph(value = "bikecustomer-graph", attributePaths = {"order"}, type = EntityGraph.EntityGraphType.LOAD)

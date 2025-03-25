@@ -1,12 +1,11 @@
 package com.example.bikecustomservise.api.service.order;
 
-import com.example.bikecustomservise.api.entities.BikeCustomer;
 import com.example.bikecustomservise.api.entities.BikeOrder;
 import com.example.bikecustomservise.api.exception.ApplicationErrorEnum;
 import com.example.bikecustomservise.api.exception.ServiceProccessingException;
 import com.example.bikecustomservise.api.model.PageRs;
 import com.example.bikecustomservise.api.model.order.OrderCreateModel;
-import com.example.bikecustomservise.api.model.order.OrderFindModel;
+import com.example.bikecustomservise.api.model.order.OrderFindPricesModel;
 import com.example.bikecustomservise.api.model.order.OrderModel;
 import com.example.bikecustomservise.api.repos.order.BikeOrderRepository;
 import com.example.bikecustomservise.api.utilit.BikeOrderMapper;
@@ -23,10 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-import static com.example.bikecustomservise.api.exception.ApplicationErrorEnum.*;
+import static com.example.bikecustomservise.api.exception.ApplicationErrorEnum.ORDER_ALREADY_EXISTS;
 
 @Service
 @Slf4j
@@ -38,9 +35,9 @@ public class BikeOrderServiceImpl implements BikeOrderService {
 
     @Override
     @Cacheable(value = "cacheConf", unless = "#result == null || #result.isEmpty()")
-    public PageRs<OrderModel> find(@NotNull final OrderFindModel findModel) {
+    public PageRs<OrderModel> find(@NotNull final OrderFindPricesModel findModel) {
         final Page<BikeOrder> orderPages = orderRepository.findOrders(
-                findModel.priceOrder(),
+                findModel.prices(),
                 PageRequest.of(
                         findModel.pageRq().getPage(),
                         findModel.pageRq().getSize()
@@ -69,7 +66,7 @@ public class BikeOrderServiceImpl implements BikeOrderService {
     @Override
     @CacheEvict(value = "cacheConf", key = "#name")
     public void deleteByOrderName(@NonNull final String name) {
-        log.debug("Deleting order with name{}",name);
+        log.debug("Deleting order with name{}", name);
         orderRepository.deleteBikeOrder(name);
         log.info("Deleted order success with");
 
@@ -77,22 +74,15 @@ public class BikeOrderServiceImpl implements BikeOrderService {
 
     @Override
     @Transactional
-    public BikeOrder saveOrder(@NonNull @Validated final OrderCreateModel model)
+    public OrderModel saveOrder(@NonNull @Validated final OrderCreateModel model)
             throws ServiceProccessingException {
         log.debug("Saving order with name{}", model.orderName());
-        if (orderRepository.existsBikeOrderByNameOrder(model.orderName())){
+        if (orderRepository.existsBikeOrderByNameOrder(model.orderName())) {
             throw new ServiceProccessingException(ORDER_ALREADY_EXISTS);
         }
         final var bikeOrder = orderRepository.save(orderMapper.mapFromModel(model));
-        final Set<String> emails = bikeOrder.getCustomers()
-                .stream()
-                .map(BikeCustomer::getEmail)
-                .collect(Collectors.toSet());
-        if (!emails.contains(model.customerEmail())) {
-            throw new ServiceProccessingException(USER_EMAIL_NOT_FOUND);
-        }
-        log.info("Create order with customer email{}",model.customerEmail());
-        return bikeOrder;
+        log.info("Create order with customer email{}", model.customerEmail());
+        return mapFromOrderEntity(bikeOrder);
 
     }
 

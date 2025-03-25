@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = CustomerNameValidator.class)
 public @interface CustomNameValid {
-    String message() default "Password do not constrain any rule of validation";
+    String message() default "Name do not constrain any rule of validation";
 
     Class<?>[] groups() default {};
 

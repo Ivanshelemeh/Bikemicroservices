@@ -55,6 +55,9 @@ public class BikeOrder implements Serializable {
     @Enumerated(value = EnumType.STRING)
     private OrderType orderType;
 
+    @Embedded
+    private OrderDetails orderDetails;
+
     public enum PremiumOrder {
         TRUE,
         FALSE

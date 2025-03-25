@@ -3,7 +3,7 @@ package com.example.bikecustomservise.api.service.transaction;
 import com.example.bikecustomservise.api.entities.CustomerTransaction;
 import com.example.bikecustomservise.api.model.transaction.TransactionFindModel;
 import com.example.bikecustomservise.api.model.transaction.TransactionalModel;
-import com.example.bikecustomservise.api.repos.transaction.BikeCustomerTransaction;
+import com.example.bikecustomservise.api.repos.transaction.CustomerTransactionRepository;
 import com.example.bikecustomservise.api.utilit.BikeCustomerMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,20 +21,16 @@ public class BikeCustomerServiceTransactionImpl implements BikeCustomerServiceTr
 
     private static final String TRANSACTIONS_ERROR_MSG = "customer's transactions periods should be set";
 
-    private final BikeCustomerTransaction customerTransaction;
+    private final CustomerTransactionRepository transactionRepository;
     private final BikeCustomerMapper mapper;
 
     @Override
     public Set<TransactionalModel> getCustomerTransactionsFrom(TransactionFindModel findModel) {
-        if (ObjectUtils.isEmpty(findModel.startPeriod()) ||
-                ObjectUtils.isEmpty(findModel.endPeriod())) {
-            log.debug("transaction periods not set");
+        if (ObjectUtils.isEmpty(findModel.customerId())) {
             throw new IllegalArgumentException(TRANSACTIONS_ERROR_MSG);
         }
-        return customerTransaction.findTransactions(
-                        findModel.customerId(),
-                        findModel.startPeriod(),
-                        findModel.endPeriod()
+        return transactionRepository.findAllCustomerTransaction(
+                        findModel.customerId()
                 ).stream()
                 .map(this::mapFromEntity)
                 .collect(Collectors.toSet());

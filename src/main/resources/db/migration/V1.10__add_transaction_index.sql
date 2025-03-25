@@ -1,0 +1,1 @@
+ALTER TABLE cus_transaction ADD INDEX idx_cust_transaction(customer_id, period_transaction);

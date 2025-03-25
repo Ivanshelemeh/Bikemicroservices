@@ -2,11 +2,10 @@ package com.example.bikecustomservise.api.model.order;
 
 import com.example.bikecustomservise.api.model.PageRq;
 
-import javax.validation.constraints.Positive;
+import java.util.List;
 
-public record OrderFindModel(
-        @Positive
-        double priceOrder,
+public record OrderFindPricesModel(
+        List<Double> prices,
         PageRq pageRq
 ) {
 }

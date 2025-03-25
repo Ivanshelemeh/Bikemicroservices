@@ -1,34 +1,37 @@
 package com.example.bikecustomservise.api.service.order;
 
 import com.example.bikecustomservise.api.entities.BikeOrder;
-import com.example.bikecustomservise.api.model.order.OrderFindModel;
+import com.example.bikecustomservise.api.model.order.OrderFindNamesModel;
 import com.example.bikecustomservise.api.model.order.OrderModel;
-import com.example.bikecustomservise.api.repos.order.OrderPremium;
+import com.example.bikecustomservise.api.repos.order.BikeOrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class BikeOrderPremiumServiceImpl implements BikeOrderPremiumService {
 
-    private final OrderPremium orderPremium;
+    private final BikeOrderRepository orderRepository;
 
     @Override
     @Transactional(readOnly = true)
-    public Set<OrderModel> findPremiumOrder(@NotNull final OrderFindModel findModel) {
+    public List<OrderModel> findPremiumOrder(@NotNull final OrderFindNamesModel findModel) {
         log.debug("finding premium order");
-        return orderPremium.findPremiumOrder(findModel.priceOrder(), findModel.pageRq().size(), findModel.pageRq().getPage())
+        return orderRepository.findPremiumOrder(PageRequest.of(
+                        findModel.pageRq().getSize(),
+                        findModel.pageRq().getPage()
+                ))
                 .stream()
                 .map(this::mapFromOrderEntity)
-                .collect(Collectors.toSet());
+                .toList();
     }
 
     private OrderModel mapFromOrderEntity(@NonNull final BikeOrder bikeOrder) {

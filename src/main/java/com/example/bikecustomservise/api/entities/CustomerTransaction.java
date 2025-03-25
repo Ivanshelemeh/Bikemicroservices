@@ -36,6 +36,9 @@ public class CustomerTransaction {
     @BatchSize(size = 100)
     private BikeCustomer customer;
 
+    @Embedded
+    private TransactionDetails transactionDetails;
+
     @Column(name = "transaction_status")
     @Enumerated(value = EnumType.STRING)
     private TransactionStatus status;

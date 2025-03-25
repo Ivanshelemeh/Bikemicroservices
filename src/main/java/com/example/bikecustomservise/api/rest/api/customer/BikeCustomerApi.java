@@ -19,7 +19,7 @@ public interface BikeCustomerApi {
                                                       @RequestParam int page,
                                                       @RequestParam double price);
 
-    @GetMapping("{/id}")
+    @GetMapping("/{id}")
     ResponseEntity<BikeCustomerModel> get(@PathVariable Integer id);
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)

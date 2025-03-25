@@ -5,6 +5,7 @@ import com.example.bikecustomservise.api.entities.BikeCustomer;
 import com.example.bikecustomservise.api.exception.ServiceProccessingException;
 import com.example.bikecustomservise.api.repos.customer.BikeCustomerRepository;
 import com.example.bikecustomservise.api.utilit.BikeCustomerMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,18 +18,13 @@ import java.util.Optional;
 
 import static com.example.bikecustomservise.api.exception.ApplicationErrorEnum.USER_PARAMS_INCORRECT;
 
-@Service("bikeLoginService")
-public class BikeLogInServiceImpl implements BikeLogInService {
+@Service("bikeLoginServiceImpl")
+@RequiredArgsConstructor
+public class BikeLoginServiceImpl implements BikeLoginService {
 
     private final BikeCustomerRepository repository;
     private final BikeCustomerMapper mapper;
     private final BCryptPasswordEncoder encoder;
-
-    public BikeLogInServiceImpl(BikeCustomerRepository repository, BikeCustomerMapper mapper, BCryptPasswordEncoder encoder) {
-        this.repository = repository;
-        this.mapper = mapper;
-        this.encoder = encoder;
-    }
 
     @Override
     public BikeCustomerSharedDTO create(BikeCustomerSharedDTO dto) {
