@@ -22,7 +22,8 @@ public enum ApplicationErrorEnum {
     EMPTY_REQUEST(4004,"The request is empty"),
     EMPTY_CUSTOMER_NAME(4005,"A customer's name is empty"),
     NOT_FOUND_CUSTOMER(4006,"A customer is not found now !"),
-    TRANSACTIONS_PERIOD_NOT_SET(4007,"Period customer's transaction should be set");
+    TRANSACTIONS_PERIOD_NOT_SET(4007,"Period customer's transaction should be set"),
+    TRANSACTION_SUMMARY_NOT_SET(4010,"Customer transactions summaries not prepared");
     private final int code;
     private final String message;
 }

@@ -7,6 +7,5 @@ import java.util.Optional;
 
 public interface TransactionSummaryRepository extends JpaRepository<TransactionSummary, Integer> {
 
-    @Override
-    Optional<TransactionSummary> findById(Integer customerId);
+    Optional<TransactionSummary> findTransactionSummaryByCustomerId(Integer customerId);
 }

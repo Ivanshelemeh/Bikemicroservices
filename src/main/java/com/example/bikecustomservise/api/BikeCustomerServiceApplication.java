@@ -9,7 +9,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
-//@EnableEurekaClient
 @EnableCaching
 @EnableScheduling
 @ComponentScan(basePackages = {"com.example.bikecustomservise.api",

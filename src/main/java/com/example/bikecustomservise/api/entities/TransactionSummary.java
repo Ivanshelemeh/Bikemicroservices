@@ -1,5 +1,6 @@
 package com.example.bikecustomservise.api.entities;
 
+import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.Subselect;
 import org.hibernate.annotations.Synchronize;
 
@@ -13,7 +14,8 @@ import javax.persistence.Id;
         "FROM BikeCustomer bk " +
         "JOIN CustomerTransaction ct ON ct.customer_id = bk.id" +
         "JOIN BikeOrder bo ON bo.id = bk.id " +
-        "GROUP BY bk.id")
+        "GROUP BY bk.id HAVING total_order_price > 10000")
+@Immutable
 @Synchronize(value = {"BikeCustomer,CustomerTransaction,BikeOrder"})
 public record TransactionSummary(
         @Id
