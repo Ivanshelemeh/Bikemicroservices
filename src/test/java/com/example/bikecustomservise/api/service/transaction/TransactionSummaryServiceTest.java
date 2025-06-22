@@ -19,6 +19,7 @@ import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 
+import java.time.Duration;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
@@ -69,9 +70,9 @@ class TransactionSummaryServiceTest {
     void should_publish_successfully() {
 
         Integer customerId = 1;
-        Long expectedCustomerId = 1L;
+        Integer expectedCustomerId = 1;
         Integer expectedTotalTransactions = 5;
-        Long expectedTotalPrice = 1000L;
+        Integer expectedTotalPrice = 1000;
 
         // Mock repository response
         when(summaryRepository.findTransactionSummaryByCustomerId(customerId))
@@ -85,7 +86,7 @@ class TransactionSummaryServiceTest {
 
         // Then verify message was published
         ConsumerRecords<String, AnalyzeEventDto> records =
-                KafkaTestUtils.getRecords(consumer);
+                KafkaTestUtils.getRecords(consumer, Duration.ofSeconds(10L));
 
         assertFalse(records.isEmpty());
         ConsumerRecord<String, AnalyzeEventDto> record =
