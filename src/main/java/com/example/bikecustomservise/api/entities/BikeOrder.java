@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "bike_order")
@@ -29,12 +30,17 @@ public class BikeOrder implements Serializable {
     @NotNull
     private String nameOrder;
 
-    @Column(name = "price")
-    private double priceOrder;
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "id")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,
+            mappedBy = "id")
     @BatchSize(size = 100)
     private List<BikeCustomer> customers;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = {
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REMOVE
+    }, mappedBy = "bikeOrder")
+    private Set<BikeOrderItems> orderItems;
 
     @Version
     private int version;
@@ -47,25 +53,5 @@ public class BikeOrder implements Serializable {
     @Column(name = "lastmod_at")
     private Instant lastModified;
 
-    @Column(name = "premium_order")
-    @Enumerated(value = EnumType.STRING)
-    private PremiumOrder premiumOrder;
 
-    @Column(name = "order_type")
-    @Enumerated(value = EnumType.STRING)
-    private OrderType orderType;
-
-    @Embedded
-    private OrderDetails orderDetails;
-
-    public enum PremiumOrder {
-        TRUE,
-        FALSE
-    }
-
-    public enum OrderType {
-        BIKE,
-        ENGINE,
-        DETAIL
-    }
 }

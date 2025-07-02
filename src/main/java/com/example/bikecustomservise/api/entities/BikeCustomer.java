@@ -43,7 +43,7 @@ public class BikeCustomer implements Serializable {
 
     @ManyToOne(targetEntity = BikeOrder.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "id", insertable = false, updatable = false)
-    @BatchSize(size = 100)
+    @BatchSize(size = 10)
     private BikeOrder order;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {

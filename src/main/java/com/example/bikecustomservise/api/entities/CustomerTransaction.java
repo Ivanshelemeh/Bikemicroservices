@@ -33,7 +33,7 @@ public class CustomerTransaction {
             CascadeType.REMOVE
     })
     @JoinColumn(name = "customer_id", insertable = false, updatable = false)
-    @BatchSize(size = 100)
+    @BatchSize(size = 10)
     private BikeCustomer customer;
 
     @Embedded

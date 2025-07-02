@@ -2,9 +2,9 @@ package com.example.bikecustomservise.api.config;
 
 import com.example.bikecustomservise.api.dto.analyze.AnalyzeEventDto;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
@@ -14,7 +14,7 @@ import org.springframework.kafka.transaction.KafkaTransactionManager;
 import java.util.HashMap;
 import java.util.Map;
 
-@Configurable
+@Configuration
 public class KafkaConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
