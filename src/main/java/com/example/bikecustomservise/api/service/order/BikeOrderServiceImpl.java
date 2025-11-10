@@ -1,12 +1,11 @@
 package com.example.bikecustomservise.api.service.order;
 
 import com.example.bikecustomservise.api.entities.BikeOrder;
+import com.example.bikecustomservise.api.entities.BikeOrderItems;
 import com.example.bikecustomservise.api.exception.ApplicationErrorEnum;
 import com.example.bikecustomservise.api.exception.ServiceProccessingException;
 import com.example.bikecustomservise.api.model.PageRs;
-import com.example.bikecustomservise.api.model.order.OrderCreateModel;
-import com.example.bikecustomservise.api.model.order.OrderFindPricesModel;
-import com.example.bikecustomservise.api.model.order.OrderModel;
+import com.example.bikecustomservise.api.model.order.*;
 import com.example.bikecustomservise.api.repos.order.BikeOrderRepository;
 import com.example.bikecustomservise.api.utilit.BikeOrderMapper;
 import lombok.RequiredArgsConstructor;
@@ -86,11 +85,28 @@ public class BikeOrderServiceImpl implements BikeOrderService {
 
     }
 
+    @Override
+    public OrderRecommendationModel createOrderRating(String orderName, Double orderRate) {
+        //TODO
+        return null;
+    }
+
     private OrderModel mapFromOrderEntity(@NonNull final BikeOrder bikeOrder) {
         return new OrderModel(
                 bikeOrder.getNameOrder(),
-                bikeOrder.getPriceOrder()
+                bikeOrder.getOrderItems()
+                        .stream()
+                        .map(this::mapFromBikeOrderItem)
+                        .toList()
         );
 
+    }
+
+    private OrderItem mapFromBikeOrderItem(@NonNull BikeOrderItems items) {
+        return  new OrderItem(
+                items.getPrice(),
+                items.getPremiumOrder().name(),
+                items.getOrderType().name()
+        );
     }
 }

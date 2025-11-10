@@ -3,12 +3,17 @@ package com.example.bikecustomservise.api.model.order;
 import com.example.bikecustomservise.api.validation.CustomNameValid;
 import org.springframework.lang.NonNull;
 
-import java.util.List;
+import javax.validation.constraints.PositiveOrZero;
 
-public record OrderModel(
+public record OrderRecommendationModel(
         @NonNull
         @CustomNameValid
         String orderName,
-        List<OrderItem> itemList
+
+        @NonNull
+        String content,
+
+        @PositiveOrZero
+        Double orderRate
 ) {
 }

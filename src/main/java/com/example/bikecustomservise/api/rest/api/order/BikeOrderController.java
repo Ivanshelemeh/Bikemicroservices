@@ -3,6 +3,7 @@ package com.example.bikecustomservise.api.rest.api.order;
 import com.example.bikecustomservise.api.dto.order.BikeOrderCreateDTO;
 import com.example.bikecustomservise.api.dto.order.BikeOrderDTO;
 import com.example.bikecustomservise.api.dto.order.BikeOrderWithTypeDTO;
+import com.example.bikecustomservise.api.dto.order.OrderItemDTO;
 import com.example.bikecustomservise.api.model.PageDtoRs;
 import com.example.bikecustomservise.api.model.PageRq;
 import com.example.bikecustomservise.api.model.UpdateResponse;
@@ -69,7 +70,10 @@ public class BikeOrderController implements BikeOrderApi {
 
     private BikeOrderDTO mapFromModel(final OrderModel orderModel) {
         return new BikeOrderDTO(orderModel.orderName(),
-                orderModel.orderPrice());
+                orderModel.itemList()
+                        .stream()
+                        .map(this::mapFromOrderItemModel)
+                        .toList());
     }
 
     private OrderCreateModel mapFromDTO(final BikeOrderCreateDTO orderCreateDTO) {
@@ -78,6 +82,15 @@ public class BikeOrderController implements BikeOrderApi {
                 orderCreateDTO.email(),
                 orderCreateDTO.orderCost()
         );
+    }
+
+    private OrderItemDTO mapFromOrderItemModel( OrderItem item) {
+        return new OrderItemDTO(
+                item.orderPrice(),
+                item.orderPremium(),
+                item.orderType()
+        );
+
     }
 
     private BikeOrderWithTypeDTO mapFromOrderTypeModel(final OrderWithTypeModel model) {

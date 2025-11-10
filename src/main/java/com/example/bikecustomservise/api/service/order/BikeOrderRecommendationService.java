@@ -1,0 +1,9 @@
+package com.example.bikecustomservise.api.service.order;
+
+import com.example.bikecustomservise.api.model.order.OrderRecommendationModel;
+import org.springframework.lang.NonNull;
+
+public interface BikeOrderRecommendationService {
+
+    OrderRecommendationModel getOrderRecommendation(@NonNull String orderId);
+}
