@@ -7,7 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientException;
+import reactor.core.publisher.Mono;
+
+import javax.validation.constraints.NotNull;
 
 @Service
 @Slf4j
@@ -28,22 +30,35 @@ public class BikeOrderRecommendationServiceImpl implements BikeOrderRecommendati
 
 
     @Override
-    public OrderRecommendationModel getOrderRecommendation(String orderId) {
+    public OrderRecommendationModel getOrderRecommendation(@NotNull String orderId) {
         final var url = RECOMM_URL + orderId;
-        final var order = bikeOrderRepository.findBikeOrderById(Integer.valueOf(orderId))
+        final var intOrderId = Integer.parseInt(orderId);
+        final var order = bikeOrderRepository.findBikeOrderById(intOrderId)
                 .orElseThrow();
-        final var recommendation = webclient.get()
+
+        log.debug("Request to recommendation service to fetch recommendation ");
+        final var recommendation = webclient
+                .get()
                 .uri(url)
                 .retrieve()
                 .bodyToMono(Recommendation.class)
-                .log(log.getName())
-                .onErrorMap(WebClientException.class, Throwable::fillInStackTrace)
+                .switchIfEmpty(Mono.error(new IllegalArgumentException("Invalid recommendation recieved.")))
+                .map(rec -> new Recommendation(
+                        rec.recommendId(),
+                        rec.recommendationContent(),
+                        rec.recommendationRate()
+                ))
                 .block();
 
         return new OrderRecommendationModel(
                 order.getNameOrder(),
+                recommendation.recommendId(),
                 recommendation.recommendationContent(),
                 recommendation.recommendationRate()
         );
+
+
     }
+
+
 }

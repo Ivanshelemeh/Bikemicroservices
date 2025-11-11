@@ -23,7 +23,8 @@ public enum ApplicationErrorEnum {
     EMPTY_CUSTOMER_NAME(4005,"A customer's name is empty"),
     NOT_FOUND_CUSTOMER(4006,"A customer is not found now !"),
     TRANSACTIONS_PERIOD_NOT_SET(4007,"Period customer's transaction should be set"),
-    TRANSACTION_SUMMARY_NOT_SET(4010,"Customer transactions summaries not prepared");
+    TRANSACTION_SUMMARY_NOT_SET(4010,"Customer transactions summaries not prepared"),
+    ORDER_RECOMMENDATION_FAIL(4111, "Recommendations of order could not be found or processed");
     private final int code;
     private final String message;
 }

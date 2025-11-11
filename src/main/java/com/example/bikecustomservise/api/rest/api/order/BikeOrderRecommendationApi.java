@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,6 @@ public interface BikeOrderRecommendationApi {
             @ApiResponse(responseCode = "400", description = "Bad request not found recommendation by incoming rate"),
             @ApiResponse(responseCode = "500", description = "Server error while requesting")
     })
-    @GetMapping("/{orderId}")
+    @GetMapping(value = "/{orderId}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<OrderRecommendationDTO> getOrderRateInfo(@PathVariable @NotBlank String orderId);
 }

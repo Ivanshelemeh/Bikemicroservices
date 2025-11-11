@@ -2,9 +2,10 @@ package com.example.bikecustomservise.api.rest.api.customer;
 
 import com.example.bikecustomservise.api.dto.BikeCustomerDTO;
 import com.example.bikecustomservise.api.dto.BikeCustomerUpdateDto;
-import com.example.bikecustomservise.api.model.customer.BikeCustomerModel;
 import com.example.bikecustomservise.api.model.PageDtoRs;
 import com.example.bikecustomservise.api.model.UpdateResponse;
+import com.example.bikecustomservise.api.model.customer.BikeCustomerFindModel;
+import com.example.bikecustomservise.api.model.customer.BikeCustomerModel;
 import com.example.bikecustomservise.api.validation.CustomNameValid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public interface BikeCustomerApi {
                                                       @RequestParam double price);
 
     @GetMapping("/{id}")
-    ResponseEntity<BikeCustomerModel> get(@PathVariable Integer id);
+    ResponseEntity<BikeCustomerFindModel> get(@PathVariable Integer id);
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<UpdateResponse> create(@Validated @RequestBody BikeCustomerDTO dto);

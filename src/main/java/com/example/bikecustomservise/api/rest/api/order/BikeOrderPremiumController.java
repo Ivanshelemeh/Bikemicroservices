@@ -31,6 +31,6 @@ public class BikeOrderPremiumController implements BikeOrderPremiumApi {
 
     private BikeOrderDTO mapFromModel(final OrderModel orderModel) {
         return new BikeOrderDTO(orderModel.orderName(),
-                orderModel.orderPrice());
+                orderModel.itemList());
     }
 }

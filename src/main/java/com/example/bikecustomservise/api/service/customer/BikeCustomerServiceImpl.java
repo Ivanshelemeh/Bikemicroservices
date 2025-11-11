@@ -4,6 +4,7 @@ import com.example.bikecustomservise.api.entities.BikeCustomer;
 import com.example.bikecustomservise.api.exception.ServiceProccessingException;
 import com.example.bikecustomservise.api.model.PageRs;
 import com.example.bikecustomservise.api.model.customer.BikeCustomerFind;
+import com.example.bikecustomservise.api.model.customer.BikeCustomerFindModel;
 import com.example.bikecustomservise.api.model.customer.BikeCustomerModel;
 import com.example.bikecustomservise.api.model.customer.BikeCustomerUpdateModel;
 import com.example.bikecustomservise.api.repos.customer.BikeCustomerRepository;
@@ -58,11 +59,11 @@ public class BikeCustomerServiceImpl implements BikeCustomerService {
     @Override
     @SneakyThrows
     @Transactional(readOnly = true)
-    public BikeCustomerModel findCustomer(final Integer id) {
+    public BikeCustomerFindModel findCustomer(final Integer id) {
         final var customer = bikeCustomerRepository
                 .findBikeCustomerById(id)
                 .orElseThrow(() -> new ServiceProccessingException(USER_NOT_FOUND));
-        return mapFromEntity(customer);
+        return mapFindModelFromEntity(customer);
 
     }
 
@@ -105,6 +106,13 @@ public class BikeCustomerServiceImpl implements BikeCustomerService {
                 customer.getPassword()
         );
 
+    }
+
+    private BikeCustomerFindModel mapFindModelFromEntity(@NonNull final BikeCustomer c) {
+        return new BikeCustomerFindModel(
+                c.getId(),
+                c.getNickName()
+        );
     }
 
 }

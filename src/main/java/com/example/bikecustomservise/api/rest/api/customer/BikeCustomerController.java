@@ -6,6 +6,7 @@ import com.example.bikecustomservise.api.model.PageDtoRs;
 import com.example.bikecustomservise.api.model.PageRq;
 import com.example.bikecustomservise.api.model.UpdateResponse;
 import com.example.bikecustomservise.api.model.customer.BikeCustomerFind;
+import com.example.bikecustomservise.api.model.customer.BikeCustomerFindModel;
 import com.example.bikecustomservise.api.model.customer.BikeCustomerModel;
 import com.example.bikecustomservise.api.model.customer.BikeCustomerUpdateModel;
 import com.example.bikecustomservise.api.service.customer.BikeCustomerService;
@@ -48,7 +49,7 @@ public class BikeCustomerController implements BikeCustomerApi {
     }
 
     @Override
-    public ResponseEntity<BikeCustomerModel> get(final Integer id) {
+    public ResponseEntity<BikeCustomerFindModel> get(final Integer id) {
         return ResponseEntity.ok(service.findCustomer(id));
 
     }
