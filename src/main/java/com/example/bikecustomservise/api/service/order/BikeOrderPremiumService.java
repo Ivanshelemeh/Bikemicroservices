@@ -8,4 +8,6 @@ import java.util.List;
 public interface BikeOrderPremiumService {
 
     List<OrderModel> findPremiumOrder(OrderFindNamesModel findModel);
+
+    OrderModel getOnePremiumModelByName(String orderType, Double priOrder);
 }

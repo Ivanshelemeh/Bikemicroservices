@@ -1,8 +1,12 @@
 package com.example.bikecustomservise.api.service.order;
 
+import com.example.bikecustomservise.api.exception.ApplicationErrorEnum;
+import com.example.bikecustomservise.api.exception.ServiceProccessingException;
 import com.example.bikecustomservise.api.model.order.OrderRecommendationModel;
 import com.example.bikecustomservise.api.model.order.integration.Recommendation;
 import com.example.bikecustomservise.api.repos.order.BikeOrderRepository;
+import com.example.bikecustomservise.api.utilit.RecommendationServiceProperties;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,44 +19,40 @@ import javax.validation.constraints.NotNull;
 @Slf4j
 public class BikeOrderRecommendationServiceImpl implements BikeOrderRecommendationService {
 
-    private static final String RECOMM_HOST = "localhost";
-    private static final String RECOMM_PORT = "8013";
-    private static final String RECOMM_SOURCE_URL = "/rest/api/v1/recommendation/";
-    private static final String RECOMM_URL = "http://" + RECOMM_HOST + ":" + RECOMM_PORT + RECOMM_SOURCE_URL;
     private final BikeOrderRepository bikeOrderRepository;
     private final WebClient webclient;
+    private final RecommendationServiceProperties properties;
 
     @Autowired
-    public BikeOrderRecommendationServiceImpl(BikeOrderRepository bikeOrderRepository, WebClient.Builder webclient) {
+    public BikeOrderRecommendationServiceImpl(BikeOrderRepository bikeOrderRepository, WebClient.Builder webclient,
+                                              RecommendationServiceProperties properties) {
         this.bikeOrderRepository = bikeOrderRepository;
         this.webclient = webclient.build();
+        this.properties = properties;
     }
 
 
+    @SneakyThrows
     @Override
-    public OrderRecommendationModel getOrderRecommendation(@NotNull String orderId) {
-        final var url = RECOMM_URL + orderId;
-        final var intOrderId = Integer.parseInt(orderId);
-        final var order = bikeOrderRepository.findBikeOrderById(intOrderId)
-                .orElseThrow();
+    public OrderRecommendationModel getOrderRecommendation(@NotNull Integer orderId) {
+        final var order = bikeOrderRepository.findBikeOrderById(orderId)
+                .orElseThrow(() -> new ServiceProccessingException(ApplicationErrorEnum.ORDER_RECOMMENDATION_FAIL));
 
         log.debug("Request to recommendation service to fetch recommendation ");
         final var recommendation = webclient
                 .get()
-                .uri(url)
+                .uri(properties.baseUrl())
                 .retrieve()
                 .bodyToMono(Recommendation.class)
+                .timeout(properties.timeOut())
                 .switchIfEmpty(Mono.error(new IllegalArgumentException("Invalid recommendation recieved.")))
-                .map(rec -> new Recommendation(
-                        rec.recommendId(),
-                        rec.recommendationContent(),
-                        rec.recommendationRate()
-                ))
-                .block();
+                .blockOptional()
+                .orElseThrow(() -> new IllegalStateException("Recommendation has not responded"));
+
 
         return new OrderRecommendationModel(
-                order.getNameOrder(),
                 recommendation.recommendId(),
+                order.getNameOrder(),
                 recommendation.recommendationContent(),
                 recommendation.recommendationRate()
         );

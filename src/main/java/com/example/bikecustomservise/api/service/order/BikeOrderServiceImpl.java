@@ -85,12 +85,6 @@ public class BikeOrderServiceImpl implements BikeOrderService {
 
     }
 
-    @Override
-    public OrderRecommendationModel createOrderRating(String orderName, Double orderRate) {
-        //TODO
-        return null;
-    }
-
     private OrderModel mapFromOrderEntity(@NonNull final BikeOrder bikeOrder) {
         return new OrderModel(
                 bikeOrder.getNameOrder(),

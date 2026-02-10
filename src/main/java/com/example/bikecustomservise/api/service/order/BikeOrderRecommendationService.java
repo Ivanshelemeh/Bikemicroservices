@@ -5,5 +5,5 @@ import org.springframework.lang.NonNull;
 
 public interface BikeOrderRecommendationService {
 
-    OrderRecommendationModel getOrderRecommendation(@NonNull String orderId);
+    OrderRecommendationModel getOrderRecommendation(@NonNull Integer orderId);
 }
