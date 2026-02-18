@@ -1,6 +1,5 @@
 package com.example.bikecustomservise.api.service.order;
 
-import com.example.bikecustomservise.api.entities.BikeOrder;
 import com.example.bikecustomservise.api.exception.ServiceProccessingException;
 import com.example.bikecustomservise.api.model.order.OrderTypedFindModel;
 import com.example.bikecustomservise.api.model.order.OrderWithTypeModel;
@@ -29,16 +28,24 @@ public class BikeOrderWithTypeServiceImpl implements BikeOrderWithTypeService {
                         findModel.orderType(),
                         findModel.priceOrderType())
                 .orElseThrow(() -> new ServiceProccessingException(ORDER_NOT_FOUND));
-        return mapFromEntity(orEntity);
+        var orderType = orEntity.getOrderItems()
+                .stream()
+                .filter(it -> findModel.orderType().equals(it.getOrderType().name()))
+                .findFirst()
+                .get().getOrderType().name();
 
-    }
+        var priceOrder = orEntity.getOrderItems()
+                .stream()
+                .filter(it -> findModel.priceOrderType() == it.getPrice().doubleValue())
+                .findFirst()
+                .get().getPrice().doubleValue();
 
-
-    private OrderWithTypeModel mapFromEntity(final BikeOrder bikeOrder) {
         return new OrderWithTypeModel(
-                bikeOrder.getNameOrder(),
-                bikeOrder.getPriceOrder(),
-                bikeOrder.getOrderType().name()
+                orEntity.getNameOrder(),
+                priceOrder,
+                orderType
         );
     }
+
+
 }

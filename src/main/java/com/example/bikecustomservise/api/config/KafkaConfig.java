@@ -1,10 +1,12 @@
 package com.example.bikecustomservise.api.config;
 
 import com.example.bikecustomservise.api.dto.analyze.AnalyzeEventDto;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
@@ -21,6 +23,12 @@ public class KafkaConfig {
     private String bootstrapServer;
     @Value("${spring.kafka.producer.key-serializer}")
     private String produceKeySerializer;
+
+    @Value("${recommendation.events.topic.name}")
+    private String recommendationOrderTopic;
+
+    private final static Integer RECOMMENDATION_TOPIC_PARTITION = 3;
+    private final static Integer RECOMMENDATION_TOPIC_REPLICATION = 3;
 
 
     private ProducerFactory<String, AnalyzeEventDto> producerFactory() {
@@ -50,6 +58,14 @@ public class KafkaConfig {
                 new KafkaTemplate<>(producerFactory());
         kafkaTemplate.setTransactionIdPrefix("trx-producer-");
         return kafkaTemplate;
+    }
+
+    @Bean
+    NewTopic createRecommendationTopic() {
+        return TopicBuilder.name(recommendationOrderTopic)
+                .partitions(RECOMMENDATION_TOPIC_PARTITION)
+                .replicas(RECOMMENDATION_TOPIC_REPLICATION)
+                .build();
     }
 
 

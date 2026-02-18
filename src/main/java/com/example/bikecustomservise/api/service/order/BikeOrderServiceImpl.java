@@ -5,7 +5,10 @@ import com.example.bikecustomservise.api.entities.BikeOrderItems;
 import com.example.bikecustomservise.api.exception.ApplicationErrorEnum;
 import com.example.bikecustomservise.api.exception.ServiceProccessingException;
 import com.example.bikecustomservise.api.model.PageRs;
-import com.example.bikecustomservise.api.model.order.*;
+import com.example.bikecustomservise.api.model.order.OrderCreateModel;
+import com.example.bikecustomservise.api.model.order.OrderFindPricesModel;
+import com.example.bikecustomservise.api.model.order.OrderItem;
+import com.example.bikecustomservise.api.model.order.OrderModel;
 import com.example.bikecustomservise.api.repos.order.BikeOrderRepository;
 import com.example.bikecustomservise.api.utilit.BikeOrderMapper;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +30,7 @@ import static com.example.bikecustomservise.api.exception.ApplicationErrorEnum.O
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class BikeOrderServiceImpl implements BikeOrderService {
+public class BikeOrderServiceImpl implements BikeOrderService{
 
     private final BikeOrderRepository orderRepository;
     private final BikeOrderMapper orderMapper;
@@ -97,10 +100,12 @@ public class BikeOrderServiceImpl implements BikeOrderService {
     }
 
     private OrderItem mapFromBikeOrderItem(@NonNull BikeOrderItems items) {
-        return  new OrderItem(
+        return new OrderItem(
                 items.getPrice(),
                 items.getPremiumOrder().name(),
+
                 items.getOrderType().name()
         );
+
     }
 }
