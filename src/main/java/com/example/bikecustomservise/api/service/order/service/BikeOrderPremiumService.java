@@ -1,4 +1,4 @@
-package com.example.bikecustomservise.api.service.order;
+package com.example.bikecustomservise.api.service.order.service;
 
 import com.example.bikecustomservise.api.model.order.OrderFindNamesModel;
 import com.example.bikecustomservise.api.model.order.OrderModel;
@@ -9,5 +9,5 @@ public interface BikeOrderPremiumService {
 
     List<OrderModel> findPremiumOrder(OrderFindNamesModel findModel);
 
-    OrderModel getOnePremiumModelByName(String orderType, Double priOrder);
+    OrderModel getPremiumModelByName(String orderType, Double priOrder);
 }

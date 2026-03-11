@@ -2,13 +2,14 @@ package com.example.bikecustomservise.api.dto.order;
 
 import org.springframework.lang.NonNull;
 
-import javax.validation.constraints.Positive;
 import java.util.List;
 
 public record BikeOrderDTO(
         @NonNull
         String orderName,
-        @Positive
+        @NonNull
         List<OrderItemDTO> itemDTOs
+
+
 ) {
 }

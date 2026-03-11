@@ -1,7 +1,7 @@
 package com.example.bikecustomservise.api.controller.order;
 
 import com.example.bikecustomservise.api.entities.BikeOrder;
-import com.example.bikecustomservise.api.service.order.BikeOrderService;
+import com.example.bikecustomservise.api.service.order.service.BikeOrderService;
 import com.example.bikecustomservise.api.utilit.BikeOrderMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;

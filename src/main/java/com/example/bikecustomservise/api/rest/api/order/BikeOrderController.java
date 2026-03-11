@@ -1,15 +1,13 @@
 package com.example.bikecustomservise.api.rest.api.order;
 
-import com.example.bikecustomservise.api.dto.order.BikeOrderCreateDTO;
-import com.example.bikecustomservise.api.dto.order.BikeOrderDTO;
-import com.example.bikecustomservise.api.dto.order.BikeOrderWithTypeDTO;
-import com.example.bikecustomservise.api.dto.order.OrderItemDTO;
+import com.example.bikecustomservise.api.dto.order.*;
 import com.example.bikecustomservise.api.model.PageDtoRs;
 import com.example.bikecustomservise.api.model.PageRq;
 import com.example.bikecustomservise.api.model.UpdateResponse;
 import com.example.bikecustomservise.api.model.order.*;
-import com.example.bikecustomservise.api.service.order.BikeOrderService;
-import com.example.bikecustomservise.api.service.order.BikeOrderWithTypeService;
+import com.example.bikecustomservise.api.model.order.integration.OrderRecommendationProcessModel;
+import com.example.bikecustomservise.api.service.order.service.BikeOrderService;
+import com.example.bikecustomservise.api.service.order.service.BikeOrderWithTypeService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class BikeOrderController implements BikeOrderApi {
+public class BikeOrderController implements BikeOrderApi, BikeOrderV2Api {
 
     private final BikeOrderService bikeOrderService;
     private final BikeOrderWithTypeService typeService;
@@ -84,7 +82,7 @@ public class BikeOrderController implements BikeOrderApi {
         );
     }
 
-    private OrderItemDTO mapFromOrderItemModel( OrderItem item) {
+    private OrderItemDTO mapFromOrderItemModel(OrderItem item) {
         return new OrderItemDTO(
                 item.orderPrice(),
                 item.orderPremium(),
@@ -99,5 +97,17 @@ public class BikeOrderController implements BikeOrderApi {
                 model.orderCost(),
                 model.orderType()
         );
+    }
+
+    private OrderRangDTO mapFromOrderRecommendationModel(OrderRecommendationProcessModel model) {
+        return new OrderRangDTO(
+                model.processedDescription(),
+                model.orderRang()
+        );
+    }
+
+    @Override
+    public ResponseEntity<BikeOrderDTO> getOrder(Integer id, Boolean isRating) {
+        return null;
     }
 }

@@ -1,10 +1,11 @@
-package com.example.bikecustomservise.api.service.order;
+package com.example.bikecustomservise.api.service.order.impl;
 
 import com.example.bikecustomservise.api.exception.ApplicationErrorEnum;
 import com.example.bikecustomservise.api.exception.ServiceProccessingException;
 import com.example.bikecustomservise.api.model.order.OrderRecommendationModel;
 import com.example.bikecustomservise.api.model.order.integration.Recommendation;
 import com.example.bikecustomservise.api.repos.order.BikeOrderRepository;
+import com.example.bikecustomservise.api.service.order.service.BikeOrderRecommendationService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,7 @@ public class BikeOrderRecommendationServiceImpl implements BikeOrderRecommendati
                 .retrieve()
                 .bodyToMono(Recommendation.class)
                 .timeout(Duration.ofSeconds(recommendationTimeout))
-                .switchIfEmpty(Mono.error(new IllegalArgumentException("Invalid recommendation recieved.")))
+                .switchIfEmpty(Mono.error(new IllegalArgumentException("Invalid recommendation received.")))
                 .blockOptional()
                 .orElseThrow(() -> new IllegalStateException("Recommendation has not responded"));
 

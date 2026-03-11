@@ -1,9 +1,10 @@
-package com.example.bikecustomservise.api.service.order;
+package com.example.bikecustomservise.api.service.order.impl;
 
 import com.example.bikecustomservise.api.exception.ServiceProccessingException;
 import com.example.bikecustomservise.api.model.order.OrderTypedFindModel;
 import com.example.bikecustomservise.api.model.order.OrderWithTypeModel;
 import com.example.bikecustomservise.api.repos.order.BikeOrderRepository;
+import com.example.bikecustomservise.api.service.order.service.BikeOrderWithTypeService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;

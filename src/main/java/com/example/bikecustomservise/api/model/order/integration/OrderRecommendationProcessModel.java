@@ -6,13 +6,13 @@ import org.springframework.lang.Nullable;
 import java.time.Instant;
 import java.util.UUID;
 
-public record RecommendationUpdateCommand(
+public record OrderRecommendationProcessModel(
         @NonNull
-        UUID recUpdateId,
+        UUID processedId,
         @NonNull
-        Instant updateTime,
+        Instant processedTime,
         @Nullable
-        String description,
-        Double orderRang
+        String processedDescription,
+        double orderRang
 ) {
 }

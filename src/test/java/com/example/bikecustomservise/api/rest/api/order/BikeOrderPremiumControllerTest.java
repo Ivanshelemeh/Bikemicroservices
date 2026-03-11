@@ -3,7 +3,7 @@ package com.example.bikecustomservise.api.rest.api.order;
 import com.example.bikecustomservise.api.dto.order.BikeOrderDTO;
 import com.example.bikecustomservise.api.model.order.OrderFindNamesModel;
 import com.example.bikecustomservise.api.model.order.OrderModel;
-import com.example.bikecustomservise.api.service.order.BikeOrderPremiumService;
+import com.example.bikecustomservise.api.service.order.service.BikeOrderPremiumService;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;

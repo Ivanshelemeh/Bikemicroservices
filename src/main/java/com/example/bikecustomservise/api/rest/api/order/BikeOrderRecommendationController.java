@@ -1,7 +1,7 @@
 package com.example.bikecustomservise.api.rest.api.order;
 
 import com.example.bikecustomservise.api.dto.order.OrderRecommendationDTO;
-import com.example.bikecustomservise.api.service.order.BikeOrderRecommendationService;
+import com.example.bikecustomservise.api.service.order.service.BikeOrderRecommendationService;
 import com.example.bikecustomservise.api.utilit.BikeOrderMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ public class BikeOrderRecommendationController implements BikeOrderRecommendatio
 
     @Override
     public ResponseEntity<OrderRecommendationDTO> getOrderRateInfo(@Valid @NonNull String orderId) {
-        final var orderRecommendation = recommendationService.getOrderRecommendation(orderId);
+        final var orderRecommendation = recommendationService.getOrderRecommendation(Integer.valueOf(orderId));
         return ResponseEntity.ok(mapper.mapFromModel(orderRecommendation));
     }
 

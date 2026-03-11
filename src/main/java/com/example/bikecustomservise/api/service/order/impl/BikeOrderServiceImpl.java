@@ -1,4 +1,4 @@
-package com.example.bikecustomservise.api.service.order;
+package com.example.bikecustomservise.api.service.order.impl;
 
 import com.example.bikecustomservise.api.entities.BikeOrder;
 import com.example.bikecustomservise.api.entities.BikeOrderItems;
@@ -10,6 +10,7 @@ import com.example.bikecustomservise.api.model.order.OrderFindPricesModel;
 import com.example.bikecustomservise.api.model.order.OrderItem;
 import com.example.bikecustomservise.api.model.order.OrderModel;
 import com.example.bikecustomservise.api.repos.order.BikeOrderRepository;
+import com.example.bikecustomservise.api.service.order.service.BikeOrderService;
 import com.example.bikecustomservise.api.utilit.BikeOrderMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -30,7 +31,7 @@ import static com.example.bikecustomservise.api.exception.ApplicationErrorEnum.O
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class BikeOrderServiceImpl implements BikeOrderService{
+public class BikeOrderServiceImpl implements BikeOrderService {
 
     private final BikeOrderRepository orderRepository;
     private final BikeOrderMapper orderMapper;
@@ -94,8 +95,7 @@ public class BikeOrderServiceImpl implements BikeOrderService{
                 bikeOrder.getOrderItems()
                         .stream()
                         .map(this::mapFromBikeOrderItem)
-                        .toList()
-        );
+                        .toList());
 
     }
 

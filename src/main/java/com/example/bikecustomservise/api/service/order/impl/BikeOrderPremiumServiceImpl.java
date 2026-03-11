@@ -1,4 +1,4 @@
-package com.example.bikecustomservise.api.service.order;
+package com.example.bikecustomservise.api.service.order.impl;
 
 import com.example.bikecustomservise.api.entities.BikeOrder;
 import com.example.bikecustomservise.api.entities.BikeOrderItems;
@@ -8,6 +8,7 @@ import com.example.bikecustomservise.api.model.order.OrderFindNamesModel;
 import com.example.bikecustomservise.api.model.order.OrderItem;
 import com.example.bikecustomservise.api.model.order.OrderModel;
 import com.example.bikecustomservise.api.repos.order.BikeOrderRepository;
+import com.example.bikecustomservise.api.service.order.service.BikeOrderPremiumService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +49,7 @@ public class BikeOrderPremiumServiceImpl implements BikeOrderPremiumService {
     @SneakyThrows
     @Override
     @Transactional(readOnly = true)
-    public OrderModel getOnePremiumModelByName(@NotBlank String orderType, @Positive Double price) {
+    public OrderModel getPremiumModelByName(@NotBlank String orderType, @Positive Double price) {
         log.info("Fetch premium order ={}", price);
         final var currOrder = orderRepository.findCurrentOrderType(orderType, price)
                 .orElseThrow(() -> new ServiceProccessingException(ApplicationErrorEnum.ORDER_NOT_FOUND));

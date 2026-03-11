@@ -27,8 +27,16 @@ public class KafkaConfig {
     @Value("${recommendation.events.topic.name}")
     private String recommendationOrderTopic;
 
+    @Value("${analyze-transaction.events.topic.name}")
+    private String analyzeTransactionTopic;
+    @Value("${analyze-transaction.partitions}")
+    private Integer analyzeTransactionPartition = 3;
+    @Value("${analyze-transaction.replication.factor}")
+    private Integer analyzeTransactionReplicationFactor;
+
     private final static Integer RECOMMENDATION_TOPIC_PARTITION = 3;
     private final static Integer RECOMMENDATION_TOPIC_REPLICATION = 3;
+    private final static Integer ANALYZE_TRANSACTION_REPLICATION = 3;
 
 
     private ProducerFactory<String, AnalyzeEventDto> producerFactory() {
@@ -68,5 +76,12 @@ public class KafkaConfig {
                 .build();
     }
 
+    @Bean
+    NewTopic createAnalyzeTransactionTopic() {
+        return TopicBuilder.name(analyzeTransactionTopic)
+                .partitions(analyzeTransactionPartition)
+                .replicas(analyzeTransactionReplicationFactor)
+                .build();
+    }
 
 }
