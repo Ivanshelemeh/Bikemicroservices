@@ -17,7 +17,7 @@ import java.util.List;
 public interface BikeOrderApi {
 
     @GetMapping
-    ResponseEntity<PageDtoRs<OrderModel>> find(@RequestParam(value = "costs")List<Double> costs,
+    ResponseEntity<PageDtoRs<OrderModel>> find(@RequestParam(value = "costs")List<String> orderNames,
                                                @RequestParam int size,
                                                @RequestParam int page);
 

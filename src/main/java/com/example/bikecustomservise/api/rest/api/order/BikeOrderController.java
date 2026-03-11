@@ -1,11 +1,13 @@
 package com.example.bikecustomservise.api.rest.api.order;
 
-import com.example.bikecustomservise.api.dto.order.*;
+import com.example.bikecustomservise.api.dto.order.BikeOrderCreateDTO;
+import com.example.bikecustomservise.api.dto.order.BikeOrderDTO;
+import com.example.bikecustomservise.api.dto.order.BikeOrderWithTypeDTO;
+import com.example.bikecustomservise.api.dto.order.OrderItemDTO;
 import com.example.bikecustomservise.api.model.PageDtoRs;
 import com.example.bikecustomservise.api.model.PageRq;
 import com.example.bikecustomservise.api.model.UpdateResponse;
 import com.example.bikecustomservise.api.model.order.*;
-import com.example.bikecustomservise.api.model.order.integration.OrderRecommendationProcessModel;
 import com.example.bikecustomservise.api.service.order.service.BikeOrderService;
 import com.example.bikecustomservise.api.service.order.service.BikeOrderWithTypeService;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +26,9 @@ public class BikeOrderController implements BikeOrderApi, BikeOrderV2Api {
     private final BikeOrderWithTypeService typeService;
 
     @Override
-    public ResponseEntity<PageDtoRs<OrderModel>> find(List<Double> costs, int size, int page) {
+    public ResponseEntity<PageDtoRs<OrderModel>> find(List<String>  orderNames, int size, int page) {
         final var orderPage = bikeOrderService.find(
-                new OrderFindPricesModel(costs,
+                new OrderFindPricesModel(orderNames,
                         new PageRq(size, page))
         );
         return ResponseEntity.ok(new PageDtoRs<>(
@@ -99,12 +101,12 @@ public class BikeOrderController implements BikeOrderApi, BikeOrderV2Api {
         );
     }
 
-    private OrderRangDTO mapFromOrderRecommendationModel(OrderRecommendationProcessModel model) {
+ /*   private OrderRangDTO mapFromOrderRecommendationModel(OrderRecommendationProcessModel model) {
         return new OrderRangDTO(
                 model.processedDescription(),
                 model.orderRang()
         );
-    }
+    }*/
 
     @Override
     public ResponseEntity<BikeOrderDTO> getOrder(Integer id, Boolean isRating) {

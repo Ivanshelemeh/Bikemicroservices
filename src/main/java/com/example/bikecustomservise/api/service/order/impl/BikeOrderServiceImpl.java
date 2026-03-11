@@ -1,5 +1,8 @@
 package com.example.bikecustomservise.api.service.order.impl;
 
+import com.blazebit.persistence.CriteriaBuilder;
+import com.blazebit.persistence.CriteriaBuilderFactory;
+import com.example.bikecustomservise.api.config.BlazePersistenceConfig;
 import com.example.bikecustomservise.api.entities.BikeOrder;
 import com.example.bikecustomservise.api.entities.BikeOrderItems;
 import com.example.bikecustomservise.api.exception.ApplicationErrorEnum;
@@ -35,12 +38,21 @@ public class BikeOrderServiceImpl implements BikeOrderService {
 
     private final BikeOrderRepository orderRepository;
     private final BikeOrderMapper orderMapper;
+    private final BlazePersistenceConfig config;
 
     @Override
     @Cacheable(value = "cacheConf", unless = "#result == null || #result.isEmpty()")
     public PageRs<OrderModel> find(@NotNull final OrderFindPricesModel findModel) {
+        CriteriaBuilderFactory builderFactory = config.createCriteriaBuilderFactory();
+        CriteriaBuilder<BikeOrder> cb = builderFactory.create(config.entityManagerFactory(), BikeOrder.class, "bo");
+        if (!findModel.orderNames().isEmpty()) {
+            cb.where("bo.product_name").eq(findModel.orderNames());
+        }
+        cb.orderByAsc("bo.created_at").orderByAsc("bo.id");
+
+
         final Page<BikeOrder> orderPages = orderRepository.findOrders(
-                findModel.prices(),
+                cb,
                 PageRequest.of(
                         findModel.pageRq().getPage(),
                         findModel.pageRq().getSize()

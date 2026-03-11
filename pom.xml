@@ -19,6 +19,7 @@
         <spring-boot-starter-validation>2.6.1</spring-boot-starter-validation>
         <org.modelmapper>2.3.5</org.modelmapper>
         <spring-boot-starter-security>2.3.3.RELEASE</spring-boot-starter-security>
+        <blaze-persistence.version>1.6.11</blaze-persistence.version>
     </properties>
     <dependencies>
         <dependency>
@@ -72,9 +73,27 @@
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
-            <version>2.12.15</version> <!-- Replace with your desired Scala version -->
+            <version>2.12.15</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.blazebit</groupId>
+            <artifactId>blaze-persistence-core-api</artifactId>
+            <version>${blaze-persistence.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.blazebit</groupId>
+            <artifactId>blaze-persistence-core-impl</artifactId>
+            <version>${blaze-persistence.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.blazebit</groupId>
+            <artifactId>blaze-persistence-integration-hibernate-5.6</artifactId>
+            <version>${blaze-persistence.version}</version>
+            <scope>runtime</scope>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
