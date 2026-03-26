@@ -1,8 +1,6 @@
 package com.example.bikecustomservise.api.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.BatchSize;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -18,12 +16,15 @@ import java.util.Set;
 @Table(name = "bike_order")
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NamedEntityGraph(name = "order-graph", attributeNodes = {@NamedAttributeNode(value = "customers")})
 public class BikeOrder implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Integer id;
 
     @Column(name = "product_name", unique = true)
@@ -33,6 +34,7 @@ public class BikeOrder implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,
             mappedBy = "id")
     @BatchSize(size = 100)
+    @EqualsAndHashCode.Exclude
     private List<BikeCustomer> customers;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {
@@ -40,6 +42,7 @@ public class BikeOrder implements Serializable {
             CascadeType.PERSIST,
             CascadeType.REMOVE
     }, mappedBy = "bikeOrder")
+    @EqualsAndHashCode.Exclude
     private Set<BikeOrderItems> orderItems;
 
     @Version
