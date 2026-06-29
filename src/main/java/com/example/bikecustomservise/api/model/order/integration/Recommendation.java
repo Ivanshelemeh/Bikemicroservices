@@ -1,8 +1,9 @@
 package com.example.bikecustomservise.api.model.order.integration;
 
+import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.lang.NonNull;
 
-import javax.validation.constraints.PositiveOrZero;
+
 
 public record Recommendation(
 

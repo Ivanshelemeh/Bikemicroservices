@@ -10,18 +10,17 @@ import com.example.bikecustomservise.api.model.customer.BikeCustomerUpdateModel;
 import com.example.bikecustomservise.api.repos.customer.BikeCustomerRepository;
 import com.example.bikecustomservise.api.utilit.BikeCustomerMapper;
 import com.example.bikecustomservise.api.validation.CustomNameValid;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.validation.constraints.Email;
 
 import static com.example.bikecustomservise.api.exception.ApplicationErrorEnum.USER_NOT_FOUND;
 
@@ -36,22 +35,19 @@ public class BikeCustomerServiceImpl implements BikeCustomerService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public PageRs<BikeCustomerModel> findAll(final BikeCustomerFind customerFind) {
-        final Page<BikeCustomer> customerPage = bikeCustomerRepository.findAll(
-                customerFind.priceOrder(),
-                PageRequest.of(
-                        customerFind.pageRq().getPage(),
-                        customerFind.pageRq().getSize()
-                )
-        );
-        return new PageRs<>(customerPage.getContent()
+        Pageable pageable = PageRequest.of(customerFind.pageRq().getSize(), customerFind.pageRq().getPage());
+        var results = bikeCustomerRepository.fetchPagesCustomers(Long.valueOf(customerFind.pageRq().getSize()), pageable);
+        boolean hasNext = results.size() == customerFind.pageRq().getSize();
+        var nextCursor = hasNext ? results.getLast().getId() : null;
+        return new PageRs<>(results
                 .stream()
                 .map(this::mapFromEntity)
                 .toList(),
-                customerPage.getSize(),
-                customerPage.hasNext(),
-                customerPage.getNumber(),
-                Math.toIntExact(customerPage.getTotalElements()));
+                results.size(),
+                hasNext,
+                nextCursor);
 
 
     }

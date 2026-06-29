@@ -4,8 +4,8 @@ import com.example.bikecustomservise.api.validation.CustomNameValid;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PositiveOrZero;
 
 public record OrderRecommendationModel(
 

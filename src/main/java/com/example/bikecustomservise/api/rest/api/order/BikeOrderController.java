@@ -35,8 +35,7 @@ public class BikeOrderController implements BikeOrderApi, BikeOrderV2Api {
                 orderPage.content(),
                 orderPage.pageSize(),
                 orderPage.hasNext(),
-                orderPage.pageNumber(),
-                orderPage.totalElements()
+                orderPage.pageNumber()
         ));
     }
 

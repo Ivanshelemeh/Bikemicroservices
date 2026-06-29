@@ -5,6 +5,5 @@ import java.util.List;
 public record PageDtoRs<T>(List<T> list,
                            int pageSize,
                            boolean hasNext,
-                           int pageNumber,
-                           int totalElements) {
+                           int pageNumber) {
 }

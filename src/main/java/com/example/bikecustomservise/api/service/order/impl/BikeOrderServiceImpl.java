@@ -1,8 +1,5 @@
 package com.example.bikecustomservise.api.service.order.impl;
 
-import com.blazebit.persistence.CriteriaBuilder;
-import com.blazebit.persistence.CriteriaBuilderFactory;
-import com.example.bikecustomservise.api.config.BlazePersistenceConfig;
 import com.example.bikecustomservise.api.entities.BikeOrder;
 import com.example.bikecustomservise.api.entities.BikeOrderItems;
 import com.example.bikecustomservise.api.exception.ApplicationErrorEnum;
@@ -15,19 +12,17 @@ import com.example.bikecustomservise.api.model.order.OrderModel;
 import com.example.bikecustomservise.api.repos.order.BikeOrderRepository;
 import com.example.bikecustomservise.api.service.order.service.BikeOrderService;
 import com.example.bikecustomservise.api.utilit.BikeOrderMapper;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-
-import javax.validation.constraints.NotNull;
 
 import static com.example.bikecustomservise.api.exception.ApplicationErrorEnum.ORDER_ALREADY_EXISTS;
 
@@ -38,34 +33,20 @@ public class BikeOrderServiceImpl implements BikeOrderService {
 
     private final BikeOrderRepository orderRepository;
     private final BikeOrderMapper orderMapper;
-    private final BlazePersistenceConfig config;
 
     @Override
-    @Cacheable(value = "cacheConf", unless = "#result == null || #result.isEmpty()")
     public PageRs<OrderModel> find(@NotNull final OrderFindPricesModel findModel) {
-        CriteriaBuilderFactory builderFactory = config.createCriteriaBuilderFactory();
-        CriteriaBuilder<BikeOrder> cb = builderFactory.create(config.entityManagerFactory(), BikeOrder.class, "bo");
-        if (!findModel.orderNames().isEmpty()) {
-            cb.where("bo.product_name").eq(findModel.orderNames());
-        }
-        cb.orderByAsc("bo.created_at").orderByAsc("bo.id");
-
-
-        final Page<BikeOrder> orderPages = orderRepository.findOrders(
-                cb,
-                PageRequest.of(
-                        findModel.pageRq().getPage(),
-                        findModel.pageRq().getSize()
-                )
-        );
-        return new PageRs<>(orderPages.getContent()
+        Pageable pageable = PageRequest.of(findModel.pageRq().getSize(), findModel.pageRq().getPage());
+        var results = orderRepository.fetchPagesBikeOrders(Long.valueOf(findModel.pageRq().getSize()), pageable);
+        boolean hasNext = results.size() == findModel.pageRq().getSize();
+        var nextCursor = hasNext ? results.getLast().getId() : null;
+        return new PageRs<>(results
                 .stream()
                 .map(this::mapFromOrderEntity)
                 .toList(),
-                orderPages.getSize(),
-                orderPages.hasNext(),
-                orderPages.getNumber(),
-                Math.toIntExact(orderPages.getTotalElements()));
+                results.size(),
+                hasNext,
+                nextCursor);
     }
 
     @SneakyThrows

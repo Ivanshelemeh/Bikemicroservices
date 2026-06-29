@@ -1,8 +1,9 @@
 package com.example.bikecustomservise.api.model.transaction;
 
+import jakarta.validation.constraints.Positive;
 import org.springframework.lang.NonNull;
 
-import javax.validation.constraints.Positive;
+
 
 public record TransactionFindModel(
         @NonNull

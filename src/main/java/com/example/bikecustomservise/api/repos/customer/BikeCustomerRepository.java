@@ -1,13 +1,12 @@
 package com.example.bikecustomservise.api.repos.customer;
 
 import com.example.bikecustomservise.api.entities.BikeCustomer;
-import org.springframework.data.domain.Page;
+import jakarta.persistence.QueryHint;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
-import org.springframework.lang.NonNull;
 
-import javax.persistence.QueryHint;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -22,9 +21,9 @@ public interface BikeCustomerRepository extends JpaRepository<BikeCustomer, Inte
     @EntityGraph(value = "bikecustomer-graph", attributePaths = {"order"}, type = EntityGraph.EntityGraphType.LOAD)
     Optional<BikeCustomer> findBikeCustomerByNickName(String name);
 
-    @Query("select bk from BikeCustomer bk  join fetch  " +
-            " BikeOrder bo on  bo.id = bk.id where bo.priceOrder = :price and bo.priceOrder = :price")
-    Page<BikeCustomer> findAll(@NonNull final Double price, Pageable pageable);
+
+    @Query("SELECT  bc from BikeCustomer bc WHERE (: cursor IS NULL OR bc.id > :cursor) ORDER BY  bc.id")
+    List<BikeCustomer> fetchPagesCustomers(@Param("cursor") Long cursor, Pageable pageable);
 
     @Modifying
     @Query("delete from BikeCustomer bk where bk.email= :email and bk.email is not null")

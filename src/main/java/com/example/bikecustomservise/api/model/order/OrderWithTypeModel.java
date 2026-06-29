@@ -3,7 +3,7 @@ package com.example.bikecustomservise.api.model.order;
 import com.example.bikecustomservise.api.validation.CustomNameValid;
 import org.springframework.lang.NonNull;
 
-import javax.validation.constraints.Positive;
+import jakarta.validation.constraints.Positive;
 
 public record OrderWithTypeModel(
         @CustomNameValid

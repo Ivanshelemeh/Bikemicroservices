@@ -1,5 +1,7 @@
 package com.example.bikecustomservise.api.config;
 
+import jakarta.activation.DataSource;
+import jakarta.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,8 +16,6 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
 
 @Configuration
 @EnableJpaRepositories(basePackages = {
@@ -42,12 +42,13 @@ public class JpaConfig {
 
     @Bean
     public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(driver);
-        dataSource.setUrl(databaseUrl);
-        dataSource.setUsername(databaseUserName);
-        dataSource.setPassword(databasePassword);
-        return dataSource;
+        DriverManagerDataSource data = new DriverManagerDataSource();
+        data.setDriverClassName(driver);
+        data.setUrl(databaseUrl);
+        data.setUsername(databaseUserName);
+        data.setPassword(databasePassword);
+        return (DataSource) data;
+
     }
 
     @Bean
@@ -65,7 +66,7 @@ public class JpaConfig {
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPackagesToScan("com.example.bikecustomservise.api.entities");
-        factory.setDataSource(dataSource());
+        factory.setDataSource((javax.sql.DataSource) dataSource());
         factory.afterPropertiesSet();
         factory.setLoadTimeWeaver(new InstrumentationLoadTimeWeaver());
         return factory.getObject();

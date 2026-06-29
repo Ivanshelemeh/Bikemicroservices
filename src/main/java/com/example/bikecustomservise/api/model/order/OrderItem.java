@@ -2,7 +2,7 @@ package com.example.bikecustomservise.api.model.order;
 
 import org.springframework.lang.NonNull;
 
-import javax.validation.constraints.Positive;
+import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 
 public record OrderItem(

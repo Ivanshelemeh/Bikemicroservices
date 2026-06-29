@@ -23,7 +23,7 @@ public class DynamicTopicConfig {
         properties.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
         try (AdminClient adminClient = AdminClient.create(properties)) {
             Map<ConfigResource, Collection<AlterConfigOp>> collectionMap = new HashMap<>();
-            ConfigResource resource = new ConfigResource(ConfigResource.Type.TOPIC, "transactions-proses");
+            ConfigResource resource = new ConfigResource(ConfigResource.Type.TOPIC, "transactions-prosses");
 
             collectionMap.put(resource, Arrays.asList(
                     new AlterConfigOp(

@@ -6,16 +6,17 @@ import com.example.bikecustomservise.api.model.order.OrderRecommendationModel;
 import com.example.bikecustomservise.api.model.order.integration.Recommendation;
 import com.example.bikecustomservise.api.repos.order.BikeOrderRepository;
 import com.example.bikecustomservise.api.service.order.service.BikeOrderRecommendationService;
+import jakarta.validation.constraints.NotNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.retry.annotation.CircuitBreaker;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.client.RestClient;
 
-import javax.validation.constraints.NotNull;
-import java.time.Duration;
+import java.util.concurrent.TimeoutException;
 
 @Service
 @Slf4j
@@ -23,16 +24,14 @@ public class BikeOrderRecommendationServiceImpl implements BikeOrderRecommendati
 
     @Value("${services.recommendation.base.url}")
     private String recommendationUrl;
-    @Value("${services.recommendation.timeout}")
-    private Long recommendationTimeout;
     private final BikeOrderRepository bikeOrderRepository;
-    private final WebClient webclient;
+    private final RestClient restClient;
 
 
     @Autowired
-    public BikeOrderRecommendationServiceImpl(BikeOrderRepository bikeOrderRepository, WebClient.Builder webclient) {
+    public BikeOrderRecommendationServiceImpl(BikeOrderRepository bikeOrderRepository, RestClient.Builder webclient) {
         this.bikeOrderRepository = bikeOrderRepository;
-        this.webclient = webclient.build();
+        this.restClient = webclient.build();
     }
 
 
@@ -43,24 +42,28 @@ public class BikeOrderRecommendationServiceImpl implements BikeOrderRecommendati
                 .orElseThrow(() -> new ServiceProccessingException(ApplicationErrorEnum.ORDER_RECOMMENDATION_FAIL));
 
         log.debug("Request to recommendation service to fetch recommendations");
-        final var recommendation = webclient
-                .get()
-                .uri(recommendationUrl)
-                .retrieve()
-                .bodyToMono(Recommendation.class)
-                .timeout(Duration.ofSeconds(recommendationTimeout))
-                .switchIfEmpty(Mono.error(new IllegalArgumentException("Invalid recommendation received.")))
-                .blockOptional()
-                .orElseThrow(() -> new IllegalStateException("Recommendation has not responded"));
-
+        var rec = getRecommendationByUrl(recommendationUrl);
         return new OrderRecommendationModel(
-                recommendation.recommendId(),
+                rec.recommendId(),
                 order.getNameOrder(),
-                recommendation.recommendationContent(),
-                recommendation.recommendationRate()
+                rec.recommendationContent(),
+                rec.recommendationRate()
         );
 
+    }
 
+    @CircuitBreaker(retryFor = TimeoutException.class, maxAttemptsExpression ="300")
+    private Recommendation getRecommendationByUrl(String inputUrl) {
+        var recommendation = restClient
+                .get()
+                .uri(inputUrl)
+                .retrieve()
+                .body(Recommendation.class);
+        if (ObjectUtils.isEmpty(recommendation)) {
+            log.error("Recommendation request fails by url{}", recommendationUrl);
+            throw new IllegalStateException("Requesting recommendation fast fails");
+        }
+        return recommendation;
     }
 
 

@@ -30,14 +30,12 @@ public class KafkaConfig {
     @Value("${analyze-transaction.events.topic.name}")
     private String analyzeTransactionTopic;
     @Value("${analyze-transaction.partitions}")
-    private Integer analyzeTransactionPartition = 3;
+    private Integer analyzeTransactionPartition;
     @Value("${analyze-transaction.replication.factor}")
     private Integer analyzeTransactionReplicationFactor;
 
     private final static Integer RECOMMENDATION_TOPIC_PARTITION = 3;
     private final static Integer RECOMMENDATION_TOPIC_REPLICATION = 3;
-    private final static Integer ANALYZE_TRANSACTION_REPLICATION = 3;
-
 
     private ProducerFactory<String, AnalyzeEventDto> producerFactory() {
         final Map<String, Object> props = new HashMap<>();
